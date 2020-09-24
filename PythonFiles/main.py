@@ -1,7 +1,6 @@
+import PythonFiles.classTest
 
-from PythonFiles.classTest import Bruh
-
-b = Bruh('greg')
+b = PythonFiles.classTest.Bruh('greg')
 
 print(b.name)
 
