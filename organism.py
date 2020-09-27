@@ -1,11 +1,12 @@
 import numpy as np
 import random as rdm
 
+
+#Defined basic structure of all classes
 class Organism:
 
     population = []
     
-    iden = 0
 
     def __init__(self, species, alive, fertile):
         self.species = species
@@ -20,13 +21,12 @@ class Organism:
     def reproduce(self, quantity, species, alive, fertile):
         if self.fertile == True:
             for offspring in range(quantity):
-                instace = self.iden
-                instace = Organism(species, alive, fertile)
-                self.iden = self.iden + 1
-                self.population.append(instace) #bad
+                offspring = Organism(species, alive, fertile)
+                self.population.append(offspring) #bad
+    
+    def die(self):
+        self.alive = False
+        self.fertile = False
 
-
-test = Organism('wolf', True, True)
-test.reproduce(6, 'wolf', True, False)
-print(test.population)
-
+class Aspen(Organism):
+    null
