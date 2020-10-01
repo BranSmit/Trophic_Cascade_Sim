@@ -13,4 +13,4 @@ import random
 
 for years in range(10):
     for months in range(12):
-        null
+        pass

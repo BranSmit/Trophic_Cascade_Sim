@@ -2,31 +2,36 @@ import numpy as np
 import random as rdm
 
 
-#Defined basic structure of all classes
+#Defined basic structure of all sub classes
 class Organism:
 
+# Master List of all organism objects
     population = []
     
+    # Constructor, will pretty much always be modified
+    def __init__(self):
+        self.ageM = 0
+        self.alive = True
+        self.fertile = False
 
-    def __init__(self, species, alive, fertile):
-        self.species = species
-        self.alive = alive
-        self.fertile = fertile
-
-
-        #Trying to make a method to reproduce, but having
-        #Trouble with making the population list.
-        #Perhaps it should be a dictionary instead, with the identification number as the key
-        #Or maybe I can store the object name as a string?
-    def reproduce(self, quantity, species, alive, fertile):
+    # Checks if an organism is fertile, and if true, a given quantity of 
+    # Organisms are created, note that fertility does not mean the biological definition,
+    # think of it more like a "Will I make babies?" Attribute, this lets us call it every
+    # time babies are in season for every organism.
+    # THIS MUST BE OVERRIDED IN ALL SUBCLASSES, USE ONLY AS A TEMPLATE FOR COPY & PASTE
+    def reproduce(self, quantity):
         if self.fertile == True:
             for offspring in range(quantity):
-                offspring = Organism(species, alive, fertile)
-                self.population.append(offspring) #bad
-    
+                self.population.append(self)
+
+    # Kills Organism and makes them infertile
+    # Mostly used for getting eaten, but also death by natural causes     
     def die(self):
         self.alive = False
         self.fertile = False
-
-class Aspen(Organism):
-    null
+    
+    # Increases the age of the animal by an increment of a
+    # MONTH, ****not**** a YEAR.<-------IMPORTANT!!!!!!!
+    def ageup(self, quantity):
+        self.ageM = self.ageM + 1 
+        self.reproduce(quantity)
