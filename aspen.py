@@ -27,16 +27,11 @@ class Aspen(Organism):
         #print(n, floor, ceiling)
         # Loops depending on a random int betwixed the floor and celing
         for _ in range(rdm.randint(floor, ceiling)): 
-            Organism.population.append(self) # Appends a clone baby object in master pop list
+            Organism.population.append(self) # Appends baby object in master pop list
 
-
-test = Aspen()
-
-
-for _ in range(10):
-    test.reproduce()
-    print(Organism.population.__len__())
-    Organism.population.clear()
+    def nextMonth(self):
+        self.ageup()
+        self.height =  self.height + 1
 
 
 

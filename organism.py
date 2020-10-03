@@ -1,4 +1,4 @@
-import numpy as np
+#import numpy as np
 import random as rdm
 
 
@@ -32,6 +32,5 @@ class Organism:
     
     # Increases the age of the animal by an increment of a
     # MONTH, ****not**** a YEAR.<-------IMPORTANT!!!!!!!
-    def ageup(self, quantity):
+    def ageup(self):
         self.ageM = self.ageM + 1 
-        self.reproduce(quantity)
