@@ -18,6 +18,8 @@ class Aspen(Organism):
         # Making all Aspens capable of flowering, keep in mind this is
         # Averaging out among thousands of trees
         self.fertile = True
+        self.id = len(Organism.population)
+        print(len(Organism.population))
 
     def reproduce(self):
         n = self.height * Aspen.rf # Base new tree quantity
@@ -32,3 +34,7 @@ class Aspen(Organism):
         self.ageM = self.ageM + 1
         self.height = self.height + 4.6
 
+t = Aspen()
+for i in range(20):
+    t.reproduce()
+Aspen()

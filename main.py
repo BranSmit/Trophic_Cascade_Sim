@@ -1,7 +1,7 @@
-import matplotlib.pyplot as plt
-import pandas as ps
+#import matplotlib.pyplot as plt
+#import pandas as ps
 import csv
-import numpy as np
+#import numpy as np
 import random
 
 # This script will be the master script

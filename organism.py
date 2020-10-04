@@ -6,13 +6,15 @@ import random as rdm
 class Organism:
 
 # Master List of all organism objects
-    population = []
+    population = ['0th org bug fix']
+
     
     # Constructor, will pretty much always be modified
     def __init__(self):
         self.ageM = 0
         self.alive = True
         self.fertile = False
+        self.id = len(Organism.population)
 
     # Checks if an organism is fertile, and if true, a given quantity of 
     # Organisms are created, note that fertility does not mean the biological definition,
