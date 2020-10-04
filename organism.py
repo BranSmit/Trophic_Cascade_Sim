@@ -1,4 +1,4 @@
-#import numpy as np
+import numpy as np
 import random as rdm
 
 
@@ -6,7 +6,7 @@ import random as rdm
 class Organism:
 
 # Master List of all organism objects
-    population = ['0th org bug fix']
+    population = []
 
     
     # Constructor, will pretty much always be modified
@@ -15,7 +15,8 @@ class Organism:
         self.alive = True
         self.fertile = False
         self.id = len(Organism.population)
-
+        print(len(Organism.population))
+        Organism.population.append(self)
     # Checks if an organism is fertile, and if true, a given quantity of 
     # Organisms are created, note that fertility does not mean the biological definition,
     # think of it more like a "Will I make babies?" Attribute, this lets us call it every
@@ -37,3 +38,4 @@ class Organism:
 
     def nextMonth(self):
         pass 
+
