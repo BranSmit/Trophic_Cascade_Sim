@@ -32,5 +32,6 @@ class Organism:
     
     # Increases the age of the animal by an increment of a
     # MONTH, ****not**** a YEAR.<-------IMPORTANT!!!!!!!
-    def ageup(self):
-        self.ageM = self.ageM + 1 
+
+    def nextMonth(self):
+        pass 

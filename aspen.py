@@ -18,7 +18,6 @@ class Aspen(Organism):
         # Making all Aspens capable of flowering, keep in mind this is
         # Averaging out among thousands of trees
         self.fertile = True
-        
 
     def reproduce(self):
         n = self.height * Aspen.rf # Base new tree quantity
@@ -27,23 +26,9 @@ class Aspen(Organism):
         #print(n, floor, ceiling)
         # Loops depending on a random int betwixed the floor and celing
         for _ in range(rdm.randint(floor, ceiling)): 
-            Organism.population.append(self) # Appends baby object in master pop list
+            Organism.population.append(Aspen()) # Appends baby object in master pop list
 
     def nextMonth(self):
-        self.ageup()
-        self.height =  self.height + 1
+        self.ageM = self.ageM + 1
+        self.height = self.height + 4.6
 
-
-
-
-
-
-
-
-# test = Aspen()
-# print(test.fertile)
-# print(test.ageM)
-# test.ageup(2)
-# print(test.ageM)
-# print (len(Organism.population))
-# print (len(Aspen.population))
