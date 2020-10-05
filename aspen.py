@@ -33,6 +33,8 @@ class Aspen(Organism):
     def nextMonth(self):
         self.ageM = self.ageM + 1
         self.height = self.height + 4.6
+        rdmDeath = rdm.choice(range100)
+
 
 # t = Aspen()
 # for i in range(20):

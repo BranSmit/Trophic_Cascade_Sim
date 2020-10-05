@@ -5,8 +5,7 @@ import math
 
 
 class Elk(Organism):
-
-
+    
     def reproduce(self):
         if self.fertile == True:
                 self.population.append(Elk())
@@ -17,8 +16,6 @@ class Elk(Organism):
         targets = rdm.sample(prey, 20)
         for i in targets:
             Organism.population[i.id].alive = False
-        for e in Organism.population:
-            print (e.alive)
 
         
     def nextMonth(self):
