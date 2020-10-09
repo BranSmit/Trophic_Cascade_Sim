@@ -15,7 +15,6 @@ class Organism:
         self.alive = True
         self.fertile = False
         self.id = len(Organism.population)
-        print(len(Organism.population))
         Organism.population.append(self)
 
     # Checks if an organism is fertile, and if true, a given quantity of 
@@ -97,11 +96,10 @@ class Elk(Organism):
     killThresh = 120 # Height of tree before elk starts to slow growth instead of kill
     birthRate = 50
 
-     # TODO Fix this, there needs to be an average of less than 1 baby per elk I think
     def reproduce(self):
-        if self.fertile == True:
-            rdmBirth = rdm.randint(1,100)
-            if rdmBirth <= birthRate:
+        if self.fertile == True: 
+            rdmBirth = rdm.randint(1,100) 
+            if rdmBirth <= birthRate:    # If this random number is under within the birth rate, the elk will reproduce
                 self.population.append(Elk()) 
 
     def eat(self):
@@ -117,9 +115,38 @@ class Elk(Organism):
     def nextMonth(self):
         if self.alive == True:
             self.ageM = self.ageM + 1 # Increment age
+            self.eat()
             rdmDeath = rdm.randint(1, 100) # picks random number between 0 and 100
             if self.ageM >= 24: # Fertile at 2 years
                 self.fertile = True
                 self.reproduce()
             if rdmDeath == 1: # checks if the random death occurs
                 self.die()
+
+##########################################################################################
+##########################################################################################
+
+# Defining the wolf class
+
+class Wolf(Organism):
+
+    packs = []
+
+    # Couldnt figure out to use super() so I just copied and pasted :/ 
+    # Sorry John OOP
+
+    def __init__(self):
+        self.ageM = 0
+        self.alive = True
+        self.fertile = False
+        self.id = len(Organism.population)
+        Organism.population.append(self)
+        sex = rdm.random()
+        if sex > 0.5:
+            self.male = True
+        else:
+            self.male = False
+        
+
+
+        
