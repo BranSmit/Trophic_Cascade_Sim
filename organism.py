@@ -78,10 +78,9 @@ class Aspen(Organism):
         if self.alive == True: # Check if alive
             self.ageM = self.ageM + 1 # Increase Age
             self.height = self.height + self.gr # Increase height depending on growth factor
-            rdmDeath = rdm.randint(1, 1000) # picks random number between 0 and 100
             if Organism.elapsedM % 12 == 4: # Checks if it's the 4th month of the year
                 self.reproduce() # calls reproduce
-            if rdmDeath <= 2: # checks if the random death occurs
+            if rdm.random() <= 0.1 : # checks if the random death occurs
                 self.die()  # Kills tree and sets height to zero
                 self.height = 0
 
@@ -94,12 +93,11 @@ class Elk(Organism):
 
     eatQ = 60 # Quantity of trees eaten a month
     killThresh = 120 # Height of tree before elk starts to slow growth instead of kill
-    birthRate = 50
+    birthRate = 0.5
 
     def reproduce(self):
         if self.fertile == True: 
-            rdmBirth = rdm.randint(1,100) 
-            if rdmBirth <= birthRate:    # If this random number is under within the birth rate, the elk will reproduce
+            if rdm.random() <= birthRate:    # If this random number is under within the birth rate, the elk will reproduce
                 self.population.append(Elk()) 
 
     def eat(self):
@@ -130,7 +128,7 @@ class Elk(Organism):
 
 class Wolf(Organism):
 
-    packs = []
+    packs = [[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
 
     # Couldnt figure out to use super() so I just copied and pasted :/ 
     # Sorry John OOP
@@ -147,6 +145,8 @@ class Wolf(Organism):
         else:
             self.male = False
         
-
-
+# Initializing the first packs can be done later, you need to figure out how to make a new wolf inherit it's mothers pack
+# Then once that's figured out, try creating a method that moves the wolves around between packs. Either use a numpy 2d array
+# Or a basic 2D array as a list of lists. Possibly will need another atribute that can store it's multi dimensional index 
+# 
         
