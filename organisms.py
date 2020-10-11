@@ -56,13 +56,13 @@ class Aspen(Organism):
         self.ageM = 0
         self.alive = True
         # Initializing all Aspen trees with a height of 1 cm
-        self.height = 50
+        self.height = 1
         # Making all Aspens capable of flowering, keep in mind this is
         # Averaging out among thousands of trees
         self.fertile = True
         self.id = len(Organism.population)
         self.gr = 4.6
-        
+        Organism.population.append(self)
 
     def reproduce(self):
         n = self.height * Aspen.rf # Base new tree quantity
@@ -71,7 +71,7 @@ class Aspen(Organism):
         #print(n, floor, ceiling)
         # Loops depending on a random int betwixed the floor and celing
         for _ in range(rdm.randint(floor, ceiling)): 
-            Organism.population.append(Aspen()) # Appends baby object in master pop list
+            Aspen() # Appends baby object in master pop list
 
     def nextMonth(self):
         
@@ -91,14 +91,16 @@ class Aspen(Organism):
 
 class Elk(Organism):
 
+    # ELK USES DEFAULT CONSTRUCTOR
+
     eatQ = 60 # Quantity of trees eaten a month
     killThresh = 120 # Height of tree before elk starts to slow growth instead of kill
     birthRate = 0.5
 
     def reproduce(self):
         if self.fertile == True: 
-            if rdm.random() <= birthRate:    # If this random number is under within the birth rate, the elk will reproduce
-                self.population.append(Elk()) 
+            if rdm.random() <= birthRate:  # If this random number is under within the birth rate, the elk will reproduce
+                Elk()
 
     def eat(self):
         prePrey = [i for i in Organism.population if type(i) == Aspen]
@@ -140,26 +142,59 @@ class Elk(Organism):
 # Birth period: mid-April
 # Average litter size in Yellowstone: 4.4 at den emergence, 3.2 survive until late December
 class Wolf(Organism):
-    # 2d array, the first index is the pack, and thwe 
-    packs = [[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
+
+    # 2d array, the first index is the pack, and the second is the actual wolf itself
+    packs = [[]]
+
+
 
     # Couldnt figure out to use super() so I just copied and pasted :/ 
     # Sorry John OOP
 
-    def __init__(self):
-        self.ageM = 0
+    def __init__(self, pack):
+        # pack is an argument for the constructor. This is used for pack inheritence.
+        self.ageM = 0 
         self.alive = True
-        self.fertile = False
         self.id = len(Organism.population)
-        Organism.population.append(self)
-        sex = rdm.random()
-        if sex > 0.5:
-            self.male = True
-        else:
-            self.male = False
+        # Standard atributes minus fertility since only "alpha's" breed ^^^^
+        self.alpha = False # All wolves are born as non breeding ("alpha" is an innacurate term, but it's short and clear)
+        # There will only be one alpha per pack, for simplicity they will be the "Alpha Female"
+        self.pack = pack   # Pup inherits mother's pack identity
+        self.packId = len(Wolf.packs[pack]) # Much like the global id attribute, the packId attribute is the Index of the wolf inside it's pack
+        # Add this code back if you decide that Wolves need a sex attribute
+        #######################################################
+        # sex = rdm.random()
+        # if sex > 0.5:
+        #     self.male = True
+        # else:
+        #     self.male = False
+        #######################################################
+        Wolf.packs[pack].append(self) # Appending self to pack list based on pack of mother
+        Organism.population.append(self) # Appending self to global population list
+
+
+    def reproduce(self):
+        if self.alpha == True: # Checks if wolf is an alpha
+            if len(Wolf.packs[pack]) > 1: # Checks if alpha has a partner. For simplicity we will disregard sex of partner
+                litterSize = range(rdm.choice(range(3,7))) # Wolves will have litters of 3 to 6 pups //This looks like a dumb way to do this, but who *really* cares ¯\_(ツ)_/¯
+                for pup in litterSize: # Iterates through litterSize list
+                    Wolf(self.pack) # Constructs a new Wolf of the same Pack
+    
+    def eat(self):
+        # TODO: Confirm Wolf eating habits and implement 
+        # IIRC the wolves eat about 1 elk per wolf per month
+        pass
+
+    def die(self):
+        #TODO: REMEBER TO KILL BOTH THE .population AND .packs CLONES. Also remember there is no fertile attribute, only alpha.
         
+
+    def nextMonth(self):
+        # TODO: Implement random death scaling with age. REMEBER TO KILL BOTH THE .population AND .packs CLONES
+        # TODO: Implement Pack Migration using PackId's and Age. Do research about this part
+        self.reproduce()
+
 # Initializing the first packs can be done later, you need to figure out how to make a new wolf inherit it's mothers pack
 # Then once that's figured out, try creating a method that moves the wolves around between packs. Either use a numpy 2d array
 # Or a basic 2D array as a list of lists. Possibly will need another atribute that can store it's multi dimensional index 
 # use an attribute in the constructor as an argument for pack inheritence (self.pack)
-        
