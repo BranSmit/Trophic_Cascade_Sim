@@ -187,6 +187,7 @@ class Wolf(Organism):
 
     def die(self):
         #TODO: REMEBER TO KILL BOTH THE .population AND .packs CLONES. Also remember there is no fertile attribute, only alpha.
+        pass
         
 
     def nextMonth(self):
