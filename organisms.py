@@ -126,8 +126,21 @@ class Elk(Organism):
 
 # Defining the wolf class
 
-class Wolf(Organism):
 
+# Wolf figures to model off of
+
+ 
+# use greater yellowstone ecosystem numbers
+# average pack size = 9.8
+# dont go above 37 a pack ever
+# 2-5% lone wolf
+# 4-5 years average lifespan
+# 50:50 sex ratio 
+# usually monogamous, but about 25% of packs have multiple breeding pairs under polygymous matings
+# Birth period: mid-April
+# Average litter size in Yellowstone: 4.4 at den emergence, 3.2 survive until late December
+class Wolf(Organism):
+    # 2d array, the first index is the pack, and thwe 
     packs = [[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
 
     # Couldnt figure out to use super() so I just copied and pasted :/ 
@@ -148,5 +161,5 @@ class Wolf(Organism):
 # Initializing the first packs can be done later, you need to figure out how to make a new wolf inherit it's mothers pack
 # Then once that's figured out, try creating a method that moves the wolves around between packs. Either use a numpy 2d array
 # Or a basic 2D array as a list of lists. Possibly will need another atribute that can store it's multi dimensional index 
-# 
+# use an attribute in the constructor as an argument for pack inheritence (self.pack)
         
