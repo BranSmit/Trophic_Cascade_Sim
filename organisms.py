@@ -110,7 +110,8 @@ class Elk(Organism):
             if Organism.population[i.id].height >= killThresh: # Checks if tree will survive an elk attack
                 Organism.population[i.id].gr = Organism.population[i.id].gr * 0.6 # Slows elk growth
             else:
-                Organism.population[i.id].alive = False # Kills aspen if under threshold
+                Organism.population[i.id].die() # Kills aspen if under threshold
+                Organism.population[i.id].height = 0 # Set's height to 0
 
     def nextMonth(self):
         if self.alive == True:
@@ -129,25 +130,11 @@ class Elk(Organism):
 # Defining the wolf class
 
 
-# Wolf figures to model off of
 
- 
-# use greater yellowstone ecosystem numbers
-# average pack size = 9.8
-# dont go above 37 a pack ever
-# 2-5% lone wolf
-# 4-5 years average lifespan
-# 50:50 sex ratio 
-# usually monogamous, but about 25% of packs have multiple breeding pairs under polygymous matings
-# Birth period: mid-April
-# Average litter size in Yellowstone: 4.4 at den emergence, 3.2 survive until late December
 class Wolf(Organism):
 
     # 2d array, the first index is the pack, and the second is the actual wolf itself
     packs = [[]]
-
-
-
     # Couldnt figure out to use super() so I just copied and pasted :/ 
     # Sorry John OOP
 
@@ -160,7 +147,9 @@ class Wolf(Organism):
         self.alpha = False # All wolves are born as non breeding ("alpha" is an innacurate term, but it's short and clear)
         # There will only be one alpha per pack, for simplicity they will be the "Alpha Female"
         self.pack = pack   # Pup inherits mother's pack identity
-        self.packId = len(Wolf.packs[pack]) # Much like the global id attribute, the packId attribute is the Index of the wolf inside it's pack
+        self.packId = len(Wolf.packs[pack]) 
+        # Much like the global id attribute, the packId attribute is the Index of the wolf inside it's pack
+
         # Add this code back if you decide that Wolves need a sex attribute
         #######################################################
         # sex = rdm.random()
@@ -176,19 +165,31 @@ class Wolf(Organism):
     def reproduce(self):
         if self.alpha == True: # Checks if wolf is an alpha
             if len(Wolf.packs[pack]) > 1: # Checks if alpha has a partner. For simplicity we will disregard sex of partner
-                litterSize = range(rdm.choice(range(3,7))) # Wolves will have litters of 3 to 6 pups //This looks like a dumb way to do this, but who *really* cares ¯\_(ツ)_/¯
+                litterSize = range(rdm.choice(range(3,7))) 
+                # Wolves will have litters of 3 to 6 pups //This looks like a dumb way to do this, but who *really* cares ¯\_(ツ)_/¯
                 for pup in litterSize: # Iterates through litterSize list
                     Wolf(self.pack) # Constructs a new Wolf of the same Pack
     
     def eat(self):
         # TODO: Confirm Wolf eating habits and implement 
         # IIRC the wolves eat about 1 elk per wolf per month
-        pass
+        prePrey = [i for i in Organism.population if type(i) == Elk]
+        prey = [j for j in prePrey if j.alive == True] # returns living Elk
+        rdmEat = rdm.random()
+        if rdmEat < 0.665:  # This should create the right number of elk killed on average (18-22 per wolf per year)
+            preyQ = 2
+        else:
+            preyQ = 1
+        targets = rdm.sample(prey, preyQ)   # Returns 2 living elk at random
+        for i in targets:
+            Organism.population[i.id].die() # Kills number of elk based off target list
+        
 
     def die(self):
-        #TODO: REMEBER TO KILL BOTH THE .population AND .packs CLONES. Also remember there is no fertile attribute, only alpha.
-        pass
-        
+        Organism.population[self.id].alive = False # Kills Wolf in global population list
+        Organism.population[self.id].alpha = False # Makes sure dead wolves arent alphas
+        Wolf.packs[pack][packId].alive = False     # Kills Wolf in Pack List
+        Wolf.packs[pack][packId].alpha = False     # Makes sure dead wolves arent alphas
 
     def nextMonth(self):
         # TODO: Implement random death scaling with age. REMEBER TO KILL BOTH THE .population AND .packs CLONES
@@ -199,3 +200,15 @@ class Wolf(Organism):
 # Then once that's figured out, try creating a method that moves the wolves around between packs. Either use a numpy 2d array
 # Or a basic 2D array as a list of lists. Possibly will need another atribute that can store it's multi dimensional index 
 # use an attribute in the constructor as an argument for pack inheritence (self.pack)
+# Wolf figures to model off of
+
+ 
+# use greater yellowstone ecosystem numbers
+# average pack size = 9.8
+# dont go above 37 a pack ever
+# 2-5% lone wolf
+# 4-5 years average lifespan
+# 50:50 sex ratio 
+# usually monogamous, but about 25% of packs have multiple breeding pairs under polygymous matings
+# Birth period: mid-April
+# Average litter size in Yellowstone: 4.4 at den emergence, 3.2 survive until late December
