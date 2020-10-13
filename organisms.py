@@ -135,17 +135,21 @@ class Wolf(Organism):
 
     # 2d array, the first index is the pack, and the second is the actual wolf itself
     packs = [[]]
+
+    # Chance that wolf will form a new pack instead of joining a new one
+    loneWolfChance = 0.3
+
     # Couldnt figure out to use super() so I just copied and pasted :/ 
     # Sorry John OOP
-
     def __init__(self, pack):
         # pack is an argument for the constructor. This is used for pack inheritence.
         self.ageM = 0 
         self.alive = True
         self.id = len(Organism.population)
-        # Standard atributes minus fertility since only "alpha's" breed ^^^^
+        self.fertile = False 
+        # Standard atributes^^^^
         self.alpha = False # All wolves are born as non breeding ("alpha" is an innacurate term, but it's short and clear)
-        # There will only be one alpha per pack, for simplicity they will be the "Alpha Female"
+        # There will only be one alpha per pack, for simplicity there will only be the "Alpha Female"
         self.pack = pack   # Pup inherits mother's pack identity
         self.packId = len(Wolf.packs[pack]) 
         # Much like the global id attribute, the packId attribute is the Index of the wolf inside it's pack
@@ -191,10 +195,39 @@ class Wolf(Organism):
         Wolf.packs[pack][packId].alive = False     # Kills Wolf in Pack List
         Wolf.packs[pack][packId].alpha = False     # Makes sure dead wolves arent alphas
 
+    def migrate(self):
+        if self.ageM == 30:
+            self.fertile = True
+            oldPackId = self.packId                        # Stores old packId
+            oldPack = self.pack                            # Stores old pack
+            if rdm.random() < Wolf.loneWolfChance:
+                newPack = rdm.choice(range(len(Wolf.packs)))   # Returns the index of a random pack
+            else:
+                Wolf.packs.append([])
+                newPack = len(Wolf.packs) # TODO: Make new pack equal the index of the new list
+                
+
+            self.packId = len(Wolf.packs[newPack])         # Reassigns PackId to the index of the new pack
+            self.pack = newPack                            # Reassigns Pack to the index of the Wolf.packs list
+            Wolf.packs[newPack].append(self)               # Appends self to new pack
+            Wolf.packs[oldPack][oldPackId].alive = False   # Kills old wolf
+            Wolf.packs[oldPack][oldPackId].fertile = False # Makes old wolf infertile (So they can't be re assigned as the new alpha if alpha dies)
+
+
+            # Disperse wolves: grab a list of all packs, randomly select one, append it to that pack(Re assign the pack Id), and kill the clone in the old pack
+
+
     def nextMonth(self):
-        # TODO: Implement random death scaling with age. REMEBER TO KILL BOTH THE .population AND .packs CLONES
         # TODO: Implement Pack Migration using PackId's and Age. Do research about this part
-        self.reproduce()
+        if self.alive == True:
+            self.ageM = self.ageM + 1
+            self.migrate()
+            self.eat()
+            if Organism.elapsedM % 12 == 4: # Only reproduce in april
+                self.reproduce()
+            if rdm.random() <= 0.03: # Chance of dying every year ~3%  Consider proportional random death
+                self.die()
+    
 
 # Initializing the first packs can be done later, you need to figure out how to make a new wolf inherit it's mothers pack
 # Then once that's figured out, try creating a method that moves the wolves around between packs. Either use a numpy 2d array
