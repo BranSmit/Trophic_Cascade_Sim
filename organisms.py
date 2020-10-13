@@ -138,6 +138,7 @@ class Wolf(Organism):
 
     # Chance that wolf will form a new pack instead of joining a new one
     loneWolfChance = 0.3
+    # Tweak this as well as the random death chance to get an average pack size of like 9.8
 
     # Couldnt figure out to use super() so I just copied and pasted :/ 
     # Sorry John OOP
@@ -153,7 +154,6 @@ class Wolf(Organism):
         self.pack = pack   # Pup inherits mother's pack identity
         self.packId = len(Wolf.packs[pack]) 
         # Much like the global id attribute, the packId attribute is the Index of the wolf inside it's pack
-
         # Add this code back if you decide that Wolves need a sex attribute
         #######################################################
         # sex = rdm.random()
@@ -196,25 +196,24 @@ class Wolf(Organism):
         Wolf.packs[pack][packId].alpha = False     # Makes sure dead wolves arent alphas
 
     def migrate(self):
-        if self.ageM == 30:
-            self.fertile = True
-            oldPackId = self.packId                        # Stores old packId
-            oldPack = self.pack                            # Stores old pack
-            if rdm.random() < Wolf.loneWolfChance:
-                newPack = rdm.choice(range(len(Wolf.packs)))   # Returns the index of a random pack
-            else:
-                Wolf.packs.append([])
-                newPack = len(Wolf.packs) # TODO: Make new pack equal the index of the new list
-                
-
-            self.packId = len(Wolf.packs[newPack])         # Reassigns PackId to the index of the new pack
-            self.pack = newPack                            # Reassigns Pack to the index of the Wolf.packs list
-            Wolf.packs[newPack].append(self)               # Appends self to new pack
-            Wolf.packs[oldPack][oldPackId].alive = False   # Kills old wolf
-            Wolf.packs[oldPack][oldPackId].fertile = False # Makes old wolf infertile (So they can't be re assigned as the new alpha if alpha dies)
-
-
-            # Disperse wolves: grab a list of all packs, randomly select one, append it to that pack(Re assign the pack Id), and kill the clone in the old pack
+        if self.ageM == 24:
+            if rdm.random() < 0.64:
+                self.fertile = True
+                oldPackId = self.packId                          # Stores old packId
+                oldPack = self.pack                              # Stores old pack
+                if rdm.random() < Wolf.loneWolfChance:
+                    newPack = rdm.choice(range(len(Wolf.packs))) # Returns the index of a random pack 
+                    while newPack == self.pack:                  # Verifies that newPack doesnt equal current pack
+                        newPack = rdm.choice(range(len(Wolf.packs)))
+                else:
+                    newPack = len(Wolf.packs)                    # Uses length before new pack as index of new pack
+                    Wolf.packs.append([])                        # Appends blank list with index that matched newPack
+                    self.aplha = True
+                self.packId = len(Wolf.packs[newPack])           # Reassigns PackId to the index of the new pack
+                self.pack = newPack                              # Reassigns Pack to the index of the Wolf.packs list
+                Wolf.packs[newPack].append(self)                 # Appends self to new pack
+                Wolf.packs[oldPack][oldPackId].alive = False     # Kills old wolf
+                Wolf.packs[oldPack][oldPackId].fertile = False   # Makes old wolf infertile (So they can't be re assigned as the new alpha if alpha dies)
 
 
     def nextMonth(self):
@@ -226,6 +225,11 @@ class Wolf(Organism):
             if Organism.elapsedM % 12 == 4: # Only reproduce in april
                 self.reproduce()
             if rdm.random() <= 0.03: # Chance of dying every year ~3%  Consider proportional random death
+                if self.aplha == True:
+                    i = 1
+                    while Wolf.packs[self.pack][self.packId + i].alive == False: # ??????? Consider not doing this ???????????????
+                        i = i + 1
+                        # TODO: Make sure that in the case that an alpha dies, the oldest wolf in the pack becomes the alpha.
                 self.die()
     
 
