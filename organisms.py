@@ -1,7 +1,6 @@
 import random as rdm
 import math
 
-
 #Defined basic structure of all sub classes
 class Organism:
 
@@ -190,15 +189,17 @@ class Wolf(Organism):
         
 
     def die(self):
-        Organism.population[self.id].alive = False # Kills Wolf in global population list
-        Organism.population[self.id].alpha = False # Makes sure dead wolves arent alphas
-        Wolf.packs[pack][packId].alive = False     # Kills Wolf in Pack List
-        Wolf.packs[pack][packId].alpha = False     # Makes sure dead wolves arent alphas
+        # Organism.population[self.id].alive = False 
+        # Organism.population[self.id].fertile
+        self.alive = False                          # Kills Wolf in global population list
+        self.fertile = False
+        Wolf.packs[self.pack][self.packId].alive = False     # Kills Wolf in Pack List
+        Wolf.packs[self.pack][self.packId].fertile = False 
 
     def migrate(self):
         if self.ageM == 24:
+            self.fertile = True
             if rdm.random() < 0.64:
-                self.fertile = True
                 oldPackId = self.packId                          # Stores old packId
                 oldPack = self.pack                              # Stores old pack
                 if rdm.random() < Wolf.loneWolfChance:
@@ -225,12 +226,15 @@ class Wolf(Organism):
             if Organism.elapsedM % 12 == 4: # Only reproduce in april
                 self.reproduce()
             if rdm.random() <= 0.03: # Chance of dying every year ~3%  Consider proportional random death
-                if self.aplha == True:
-                    i = 1
-                    while Wolf.packs[self.pack][self.packId + i].alive == False: # ??????? Consider not doing this ???????????????
-                        i = i + 1
-                        # TODO: Make sure that in the case that an alpha dies, the oldest wolf in the pack becomes the alpha.
                 self.die()
+                if self.aplha == True:
+                    Wolf.packs[pack][packId].alpha = False     # Makes sure dead wolves arent alphas
+                    self.alpha = False                         # Makes sure dead wolves arent alphas
+                    living = [j for j in Wolf.packs[self.pack] if j.alive == True] # Returns a list of living wolves in this pack
+                    nextAlpha = [j for j in living if j.fertile == True] # Returns a list of fertile living wolves (Look, I know this is a bit redundant and inefficient)
+                    # WORKING SLOW CODE IS BETTER THAN OPTIMISED CODE THAT DOESNT RUN
+                    nextAlphaId = nextAlpha[0].packId
+                    Wolf.packs[self.pack][nextAlphaId].alpha = True  # Makes the next living fertile wolf the Alpha
     
 
 # Initializing the first packs can be done later, you need to figure out how to make a new wolf inherit it's mothers pack
