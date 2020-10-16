@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 #import pandas as ps
 import numpy as np
 import random
@@ -14,9 +14,9 @@ def setInitState():
     # First step in that, is creating all of the Aspen trees and Elk
     # The problem with that, is that as far as I can tell, no one counted all the aspen trees in yellowstone in 1995
     # That means I have to guess, and tune by parameters to make it acurate to real life
-    # 190000 Aspen  (20x elk)
+    # 190000 Aspen 
     # 19000 elk
-    for _ in range(380000):
+    for _ in range(190000):
         Aspen()
     for _ in range(19000):
         Elk()
@@ -49,15 +49,14 @@ for trials in range(5):                             # Number of trials per initi
         for months in range(12):                    # Makes it so theres 12 months in the year
             print('SUCESS')
             Organism.elapsedM = Organism.elapsedM + 1
+            quop = [i for i in Organism.population if type(i) == Aspen]
+            jack = [j for j in quop if j.alive == True] # returns living aspens
+            print(len(jack))
+            print ("month", Organism.elapsedM)
+            start = timer()
             for instance in Organism.population:
-                start = timer()
                 instance.nextMonth()
-                a = a + 1
-                f = len(Organism.population) - a
-                if f % 1000 == 0:
-                    print(f)
-                    print(timer()-start)
-                    
+            print(timer()-start)
 
 
 

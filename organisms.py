@@ -6,7 +6,7 @@ class Organism:
 
 # Master List of all organism objects
     population = []
-    elapsedM = 1
+    elapsedM = 0
 
     # Constructor, will pretty much always be modified
     def __init__(self):
@@ -48,7 +48,7 @@ class Aspen(Organism):
     
     # Tunable rate of reproduction
     # height * reproductionFactor = amount of new trees
-    rf = 0.3
+    rf = 0.03
 
     # Overwriting base organisim constructor
     def __init__(self):
@@ -92,13 +92,13 @@ class Elk(Organism):
 
     # ELK USES DEFAULT CONSTRUCTOR
 
-    eatQ = 15 # Quantity of trees eaten a month
+    eatQ = 3 # Quantity of trees eaten a month
     killThresh = 50 # Height of tree before elk starts to slow growth instead of kill
     birthRate = 0.5
 
     def reproduce(self):
         if Organism.elapsedM % 12 == 5:
-            if rdm.random() <= birthRate:  # If this random number is under within the birth rate, the elk will reproduce
+            if rdm.random() <= Elk.birthRate:  # If this random number is under within the birth rate, the elk will reproduce
                 Elk()
     # @jit(target ="cuda") GPU Acceleration test
     def eat(self):
@@ -109,23 +109,27 @@ class Elk(Organism):
             prey = rdm.choice(Organism.population)
             if prey.alive == True:
                 if type(prey) == Aspen:
-                    prey.die()
+                    if prey.height > Elk.killThresh:
+                        prey.gr = prey.gr * 0.6
+                    else:
+                        prey.die()
+                        prey.height = 0
                     a += 1
 
 
 
 
 
-        prePrey = [i for i in Organism.population if type(i) == Aspen]
-        prey = [j for j in prePrey if j.alive == True] # returns living aspens
-        # print(len(prey))
-        targets = rdm.sample(prey, Elk.eatQ) # Randomly returns a sample of all living aspens
-        for i in targets:
-            if Organism.population[i.id].height >= Elk.killThresh: # Checks if tree will survive an elk attack
-                Organism.population[i.id].gr = Organism.population[i.id].gr * 0.6 # Slows elk growth
-            else:
-                Organism.population[i.id].die() # Kills aspen if under threshold
-                Organism.population[i.id].height = 0 # Set's height to 0
+        # prePrey = [i for i in Organism.population if type(i) == Aspen]
+        # prey = [j for j in prePrey if j.alive == True] # returns living aspens
+        # # print(len(prey))
+        # targets = rdm.sample(prey, Elk.eatQ) # Randomly returns a sample of all living aspens
+        # for i in targets:
+        #     if Organism.population[i.id].height >= Elk.killThresh: # Checks if tree will survive an elk attack
+        #         Organism.population[i.id].gr = Organism.population[i.id].gr * 0.6 # Slows elk growth
+        #     else:
+        #         Organism.population[i.id].die() # Kills aspen if under threshold
+        #         Organism.population[i.id].height = 0 # Set's height to 0
 
     
     def nextMonth(self):
