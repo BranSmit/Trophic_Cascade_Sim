@@ -1,6 +1,6 @@
 import random as rdm
 import math
-
+# from numba import jit, cuda
 #Defined basic structure of all sub classes
 class Organism:
 
@@ -92,35 +92,50 @@ class Elk(Organism):
 
     # ELK USES DEFAULT CONSTRUCTOR
 
-    eatQ = 60 # Quantity of trees eaten a month
-    killThresh = 120 # Height of tree before elk starts to slow growth instead of kill
+    eatQ = 15 # Quantity of trees eaten a month
+    killThresh = 50 # Height of tree before elk starts to slow growth instead of kill
     birthRate = 0.5
 
     def reproduce(self):
-        if self.fertile == True: 
+        if Organism.elapsedM % 12 == 5:
             if rdm.random() <= birthRate:  # If this random number is under within the birth rate, the elk will reproduce
                 Elk()
-
+    # @jit(target ="cuda") GPU Acceleration test
     def eat(self):
+        # TODO: Replace this filter then random check approach with a random check then confirm approach
+        # Re writing this segment of code will very likey speed up the program several times over
+        a=0
+        while a != Elk.eatQ:
+            prey = rdm.choice(Organism.population)
+            if prey.alive == True:
+                if type(prey) == Aspen:
+                    prey.die()
+                    a += 1
+
+
+
+
+
         prePrey = [i for i in Organism.population if type(i) == Aspen]
         prey = [j for j in prePrey if j.alive == True] # returns living aspens
-        targets = rdm.sample(prey, eatQ) # Randomly returns a sample of all living aspens
+        # print(len(prey))
+        targets = rdm.sample(prey, Elk.eatQ) # Randomly returns a sample of all living aspens
         for i in targets:
-            if Organism.population[i.id].height >= killThresh: # Checks if tree will survive an elk attack
+            if Organism.population[i.id].height >= Elk.killThresh: # Checks if tree will survive an elk attack
                 Organism.population[i.id].gr = Organism.population[i.id].gr * 0.6 # Slows elk growth
             else:
                 Organism.population[i.id].die() # Kills aspen if under threshold
                 Organism.population[i.id].height = 0 # Set's height to 0
 
+    
     def nextMonth(self):
         if self.alive == True:
             self.ageM = self.ageM + 1 # Increment age
             self.eat()
-            rdmDeath = rdm.randint(1, 100) # picks random number between 0 and 100
+            #rdmDeath = rdm.randint(1, 100) # picks random number between 0 and 100
             if self.ageM >= 24: # Fertile at 2 years
-                self.fertile = True
                 self.reproduce()
-            if rdmDeath == 1: # checks if the random death occurs
+            if rdm.random() <= 0.01: # checks if the random death occurs
                 self.die()
 
 ##########################################################################################
