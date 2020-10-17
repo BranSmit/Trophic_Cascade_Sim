@@ -48,7 +48,7 @@ class Aspen(Organism):
     
     # Tunable rate of reproduction
     # height * reproductionFactor = amount of new trees
-    rf = 0.03
+    rf = 0.1
 
     # Overwriting base organisim constructor
     def __init__(self):
@@ -92,9 +92,10 @@ class Elk(Organism):
 
     # ELK USES DEFAULT CONSTRUCTOR
 
-    eatQ = 3 # Quantity of trees eaten a month
-    killThresh = 50 # Height of tree before elk starts to slow growth instead of kill
+    eatQ = 5 # Quantity of trees eaten a month
+    killThresh = 35 # Height of tree before elk starts to slow growth instead of kill
     birthRate = 0.5
+    
 
     def reproduce(self):
         if Organism.elapsedM % 12 == 5:
@@ -115,11 +116,6 @@ class Elk(Organism):
                         prey.die()
                         prey.height = 0
                     a += 1
-
-
-
-
-
         # prePrey = [i for i in Organism.population if type(i) == Aspen]
         # prey = [j for j in prePrey if j.alive == True] # returns living aspens
         # # print(len(prey))

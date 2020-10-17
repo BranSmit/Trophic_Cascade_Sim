@@ -15,7 +15,7 @@ def setInitState():
     # The problem with that, is that as far as I can tell, no one counted all the aspen trees in yellowstone in 1995
     # That means I have to guess, and tune by parameters to make it acurate to real life
     # 190000 Aspen 
-    # 19000 elk
+    # 19000 elk    742659 
     for _ in range(190000):
         Aspen()
     for _ in range(19000):
