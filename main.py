@@ -22,14 +22,14 @@ def setInitState():
         Elk()
 
     # This whole block of code is for setting up the Aspen stats 
-    for a in Aspen.population:
+    for a in Aspen.aPopulation:
         height = round(np.random.normal(35, 10))
         while height < 0:                               # If the value is a negative, it's re rolled until positive
             height = round(np.random.normal(35, 10))
         a.height = height 
 
     # This block of code sets up the stats for the elk
-    for a in Elk.population:
+    for a in Elk.ePopulation:
         age = round(np.random.normal(78, 40))
         while age < 0:                                  # If the value is negative, it's re rolled until positive
             age = round(np.random.normal(78, 40))
@@ -37,17 +37,33 @@ def setInitState():
         # The ages of the elk is a normal distribution, with a guesstimate standard deviation.
         # This is mostly a way to make the elk
 
+
+
+
+
+
 def runMonth():
-    for i in Aspen.population:
+    for i in Aspen.aPopulation:
         i.nextMonth()
     print("\n\nASPEN DONE\n\n")
-    for i in Elk.population:
+    for i in Elk.ePopulation:
         i.nextMonth()
     print("\n\nElk DONE\n\n")
     #TODO: Figure out how to run the Wolves, possibly utilise a dump list like Organism.population
 
 
-# FIXME: Why is month 4 so slow?
+
+
+
+
+
+
+
+
+# This version seems to give stable Elk numbers
+# TODO: Add Wolf re introduction
+# TODO: Start logging data and produce graphs for quick tweaking, 
+# or at lease start writing to a file so I can graph as the program is running
 for trials in range(5):                             # Number of trials per initial conditions
     Organism.population.clear()
     setInitState()
@@ -58,11 +74,17 @@ for trials in range(5):                             # Number of trials per initi
             print ("month", Organism.elapsedM)
             start = timer()
             runMonth()
-            print(timer()-start)
+            print("There are currently ",len(Aspen.aPopulation), " Aspen")
+            print("There are currently ", len(Elk.ePopulation), " Elk")
+            print(round(timer()-start))
 
 
 
-
+# There are currently  221842  Aspen
+# There are currently  31040  Elk
+# 226
+# SUCESS
+# month 20
 
 
 

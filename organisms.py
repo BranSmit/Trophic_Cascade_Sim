@@ -90,7 +90,7 @@ class Elk(Organism):
         Elk.ePopulation.append(self)
 
 
-    eatQ = 5 # Quantity of trees eaten a month
+    eatQ = 2 # Quantity of trees eaten a month
     killThresh = 35 # Height of tree before elk starts to slow growth instead of kill
     birthRate = 0.5
 
@@ -101,6 +101,7 @@ class Elk(Organism):
 
 
     def eat(self):
+        print(len(Aspen.aPopulation))
         for _ in range(Elk.eatQ):
             targetPrey = rdm.randrange(0, len(Aspen.aPopulation))        # Returns a random index that exists for aspen pop
             if Aspen.aPopulation[targetPrey].height >= Elk.killThresh:   # Checks if the height of the population is over the kill threshold
