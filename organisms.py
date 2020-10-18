@@ -11,10 +11,8 @@ class Organism:
     # Constructor, will pretty much always be modified
     def __init__(self):
         self.ageM = 0
-        self.alive = True
-        self.fertile = False
-        self.id = len(Organism.population)
-        Organism.population.append(self)
+        # self.fertile = False
+        type(self).population.append(self)
 
     # Checks if an organism is fertile, and if true, a given quantity of 
     # Organisms are created, note that fertility does not mean the biological definition,
@@ -26,12 +24,6 @@ class Organism:
             for offspring in range(quantity):
                 self.population.append(self)
 
-    # Kills Organism and makes them infertile
-    # Mostly used for getting eaten, but also death by natural causes     
-    def die(self):
-        self.alive = False
-        self.fertile = False
-    
     # Increases the age of the animal by an increment of a
     # MONTH, ****not**** a YEAR.<-------IMPORTANT!!!!!!!
 
@@ -46,42 +38,41 @@ class Organism:
 
 class Aspen(Organism):
     
+    population = []
+
     # Tunable rate of reproduction
     # height * reproductionFactor = amount of new trees
     rf = 0.1
 
     # Overwriting base organisim constructor
     def __init__(self):
-        self.ageM = 0
-        self.alive = True
+        # self.ageM = 0
+        # self.alive = True
         # Initializing all Aspen trees with a height of 1 cm
         self.height = 1
         # Making all Aspens capable of flowering, keep in mind this is
         # Averaging out among thousands of trees
-        self.fertile = True
-        self.id = len(Organism.population)
+        # self.fertile = True
+        # self.id = len(Organism.population)
         self.gr = 4.6
-        Organism.population.append(self)
+        # Organism.population.append(self)
+        Aspen.population.append(self)
 
     def reproduce(self):
-        n = self.height * Aspen.rf # Base new tree quantity
-        floor = math.floor(n-(n/4)) # Minimum new tree quantity
-        ceiling = math.ceil(n+(n/4)) # Max new tree quantity
-        #print(n, floor, ceiling)
-        # Loops depending on a random int betwixed the floor and celing
-        for _ in range(rdm.randint(floor, ceiling)): 
-            Aspen() # Appends baby object in master pop list
+        n = self.height * Aspen.rf                      # Base new tree quantity
+        floor = math.floor(n-(n/4))                     # Minimum new tree quantity
+        ceiling = math.ceil(n+(n/4))                    # Max new tree quantity  
+        for _ in range(rdm.randint(floor, ceiling)):    # Loops depending on a random int betwixed the floor and celing
+            Aspen()                                     # Appends baby tree in tree list
 
     def nextMonth(self):
-        
-        if self.alive == True: # Check if alive
-            self.ageM = self.ageM + 1 # Increase Age
-            self.height = self.height + self.gr # Increase height depending on growth factor
-            if Organism.elapsedM % 12 == 4: # Checks if it's the 4th month of the year
-                self.reproduce() # calls reproduce
-            if rdm.random() <= 0.1 : # checks if the random death occurs
-                self.die()  # Kills tree and sets height to zero
-                self.height = 0
+        # if self.alive == True: # Check if alive
+        # self.ageM = self.ageM + 1 # Increase Age
+        self.height = self.height + self.gr             # Increase height depending on growth factor
+        if Organism.elapsedM % 12 == 4:                 # Checks if it's the 4th month of the year
+            self.reproduce()                            # calls reproduce
+        if rdm.random() <= 0.1 :                        # checks if the random death occurs
+            Aspen.population.remove(self)               # Kills tree by removing from list
 
 ##########################################################################################
 ##########################################################################################
@@ -90,32 +81,44 @@ class Aspen(Organism):
 
 class Elk(Organism):
 
+    population = []
+
     # ELK USES DEFAULT CONSTRUCTOR
 
     eatQ = 5 # Quantity of trees eaten a month
     killThresh = 35 # Height of tree before elk starts to slow growth instead of kill
     birthRate = 0.5
-    
 
     def reproduce(self):
         if Organism.elapsedM % 12 == 5:
             if rdm.random() <= Elk.birthRate:  # If this random number is under within the birth rate, the elk will reproduce
                 Elk()
-    # @jit(target ="cuda") GPU Acceleration test
+
+
     def eat(self):
-        # TODO: Replace this filter then random check approach with a random check then confirm approach
+        for _ in range(Elk.eatQ):
+            targetPrey = rdm.randrange(0, len(Aspen.population))        # Returns a random index that exists for aspen pop
+            if Aspen.population[targetPrey].height >= Elk.killThresh:   # Checks if the height of the population is over the kill threshold
+                Aspen.population[targetPrey].gr *= 0.6                  # Simulates tree damage by decreasing growth rate
+            else:
+                del Aspen.population[targetPrey]                        # Removes tree from list if under threshold
+        
+        
+        # If anyone is reading this, Just know that I realise my code below is broken, but I am STILL REWORKING because it's inneficient by nature
+
         # Re writing this segment of code will very likey speed up the program several times over
-        a=0
-        while a != Elk.eatQ:
-            prey = rdm.choice(Organism.population)
-            if prey.alive == True:
-                if type(prey) == Aspen:
-                    if prey.height > Elk.killThresh:
-                        prey.gr = prey.gr * 0.6
-                    else:
-                        prey.die()
-                        prey.height = 0
-                    a += 1
+        # a=0
+        # while a != Elk.eatQ:
+        #     prey = rdm.choice(Organism.population)
+        #     if prey.alive == True:
+        #         if type(prey) == Aspen:
+        #             if prey.height > Elk.killThresh:
+        #                 prey.gr = prey.gr * 0.6
+        #             else:
+        #                 prey.die()
+        #                 prey.height = 0
+        #             a += 1
+
         # prePrey = [i for i in Organism.population if type(i) == Aspen]
         # prey = [j for j in prePrey if j.alive == True] # returns living aspens
         # # print(len(prey))
@@ -127,16 +130,14 @@ class Elk(Organism):
         #         Organism.population[i.id].die() # Kills aspen if under threshold
         #         Organism.population[i.id].height = 0 # Set's height to 0
 
-    
     def nextMonth(self):
-        if self.alive == True:
-            self.ageM = self.ageM + 1 # Increment age
-            self.eat()
-            #rdmDeath = rdm.randint(1, 100) # picks random number between 0 and 100
-            if self.ageM >= 24: # Fertile at 2 years
-                self.reproduce()
-            if rdm.random() <= 0.01: # checks if the random death occurs
-                self.die()
+        self.ageM = self.ageM + 1 # Increment age
+        self.eat()
+        #rdmDeath = rdm.randint(1, 100) # picks random number between 0 and 100
+        if self.ageM >= 24: # Fertile at 2 years
+            self.reproduce()
+        if rdm.random() <= 0.01: # checks if the random death occurs
+            Elk.population.remove(self)
 
 ##########################################################################################
 ##########################################################################################

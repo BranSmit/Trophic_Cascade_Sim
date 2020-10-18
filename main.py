@@ -9,7 +9,7 @@ from organisms import* # Imports all classes
 # This script will be the master script
 
 # First thing we need to do is initialize the ecosystem to imitate the 1995 Greater Yellowstone ecosystem
-
+# FIXME: Update function to fix where the things are pointing
 def setInitState():
     # First step in that, is creating all of the Aspen trees and Elk
     # The problem with that, is that as far as I can tell, no one counted all the aspen trees in yellowstone in 1995
@@ -21,27 +21,31 @@ def setInitState():
     for _ in range(19000):
         Elk()
 
-    # This whole block of code is for setting up the Aspen stats
-    for a in [i for i in Organism.population if type(i) == Aspen]:
-        index = a.id
+    # This whole block of code is for setting up the Aspen stats 
+    for a in Aspen.population:
         height = round(np.random.normal(35, 10))
         while height < 0:                               # If the value is a negative, it's re rolled until positive
             height = round(np.random.normal(35, 10))
-        age = round(height / 3.45)
-        Organism.population[index].height = height 
-        Organism.population[index].ageM = age 
+        a.height = height 
 
     # This block of code sets up the stats for the elk
-    for a in [i for i in Organism.population if type(i) == Elk]:
-        index = a.id
+    for a in Elk.population:
         age = round(np.random.normal(78, 40))
         while age < 0:                                  # If the value is negative, it's re rolled until positive
             age = round(np.random.normal(78, 40))
-        Organism.population[index].ageM = age           
+        a.ageM = age           
         # The ages of the elk is a normal distribution, with a guesstimate standard deviation.
         # This is mostly a way to make the elk
 
-a = 0
+def runMonth():
+    for i in Aspen.population:
+        i.nextMonth()
+    for i in Elk.population:
+        i.nextMonth()
+    #TODO: Figure out how to run the Wolves, possibly utilise a dump list like Organism.population
+
+
+# FIXME: Why is month 4 so slow?
 for trials in range(5):                             # Number of trials per initial conditions
     Organism.population.clear()
     setInitState()
@@ -49,13 +53,9 @@ for trials in range(5):                             # Number of trials per initi
         for months in range(12):                    # Makes it so theres 12 months in the year
             print('SUCESS')
             Organism.elapsedM = Organism.elapsedM + 1
-            quop = [i for i in Organism.population if type(i) == Aspen]
-            jack = [j for j in quop if j.alive == True] # returns living aspens
-            print(len(jack))
             print ("month", Organism.elapsedM)
             start = timer()
-            for instance in Organism.population:
-                instance.nextMonth()
+            runMonth()
             print(timer()-start)
 
 
