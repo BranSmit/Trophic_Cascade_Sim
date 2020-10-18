@@ -40,8 +40,10 @@ def setInitState():
 def runMonth():
     for i in Aspen.population:
         i.nextMonth()
+    print("\n\nASPEN DONE\n\n")
     for i in Elk.population:
         i.nextMonth()
+    print("\n\nElk DONE\n\n")
     #TODO: Figure out how to run the Wolves, possibly utilise a dump list like Organism.population
 
 

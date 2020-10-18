@@ -38,7 +38,7 @@ class Organism:
 
 class Aspen(Organism):
     
-    population = []
+    aPopulation = []
 
     # Tunable rate of reproduction
     # height * reproductionFactor = amount of new trees
@@ -46,7 +46,7 @@ class Aspen(Organism):
 
     # Overwriting base organisim constructor
     def __init__(self):
-        # self.ageM = 0
+        self.ageM = 0
         # self.alive = True
         # Initializing all Aspen trees with a height of 1 cm
         self.height = 1
@@ -56,7 +56,7 @@ class Aspen(Organism):
         # self.id = len(Organism.population)
         self.gr = 4.6
         # Organism.population.append(self)
-        Aspen.population.append(self)
+        Aspen.aPopulation.append(self)
 
     def reproduce(self):
         n = self.height * Aspen.rf                      # Base new tree quantity
@@ -67,12 +67,13 @@ class Aspen(Organism):
 
     def nextMonth(self):
         # if self.alive == True: # Check if alive
-        # self.ageM = self.ageM + 1 # Increase Age
+        self.ageM = self.ageM + 1                       # Increase Age
         self.height = self.height + self.gr             # Increase height depending on growth factor
-        if Organism.elapsedM % 12 == 4:                 # Checks if it's the 4th month of the year
-            self.reproduce()                            # calls reproduce
+        if self.ageM > 2:                               # Makes sure the tree isnt reproducing right after its born
+            if Organism.elapsedM % 12 == 4:             # Checks if it's the 4th month of the year
+                self.reproduce()                        # calls reproduce
         if rdm.random() <= 0.1 :                        # checks if the random death occurs
-            Aspen.population.remove(self)               # Kills tree by removing from list
+            Aspen.aPopulation.remove(self)               # Kills tree by removing from list
 
 ##########################################################################################
 ##########################################################################################
@@ -81,9 +82,13 @@ class Aspen(Organism):
 
 class Elk(Organism):
 
-    population = []
+    ePopulation = []
 
-    # ELK USES DEFAULT CONSTRUCTOR
+    def __init__(self):
+        self.ageM = 0
+        # self.fertile = False
+        Elk.ePopulation.append(self)
+
 
     eatQ = 5 # Quantity of trees eaten a month
     killThresh = 35 # Height of tree before elk starts to slow growth instead of kill
@@ -97,11 +102,11 @@ class Elk(Organism):
 
     def eat(self):
         for _ in range(Elk.eatQ):
-            targetPrey = rdm.randrange(0, len(Aspen.population))        # Returns a random index that exists for aspen pop
-            if Aspen.population[targetPrey].height >= Elk.killThresh:   # Checks if the height of the population is over the kill threshold
-                Aspen.population[targetPrey].gr *= 0.6                  # Simulates tree damage by decreasing growth rate
+            targetPrey = rdm.randrange(0, len(Aspen.aPopulation))        # Returns a random index that exists for aspen pop
+            if Aspen.aPopulation[targetPrey].height >= Elk.killThresh:   # Checks if the height of the population is over the kill threshold
+                Aspen.aPopulation[targetPrey].gr *= 0.6                  # Simulates tree damage by decreasing growth rate
             else:
-                del Aspen.population[targetPrey]                        # Removes tree from list if under threshold
+                del Aspen.aPopulation[targetPrey]                        # Removes tree from list if under threshold
         
         
         # If anyone is reading this, Just know that I realise my code below is broken, but I am STILL REWORKING because it's inneficient by nature
@@ -137,7 +142,7 @@ class Elk(Organism):
         if self.ageM >= 24: # Fertile at 2 years
             self.reproduce()
         if rdm.random() <= 0.01: # checks if the random death occurs
-            Elk.population.remove(self)
+            Elk.ePopulation.remove(self)
 
 ##########################################################################################
 ##########################################################################################
