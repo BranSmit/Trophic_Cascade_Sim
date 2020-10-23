@@ -41,22 +41,6 @@ class Aspen():
         if rdm.random() <= 0.1 :                        # checks if the random death occurs
             Aspen.population.remove(self)               # Kills tree by removing from list
 
-for i in range(20):
-    Aspen()
-    
-Aspen.population[5].height = 4000
-Aspen.population[2].height = 4000
-
-for i in Aspen.population:
-    a=0
-    a+=1
-    print(i.height)
-
-print("\n\n\n\n\n TEST \n\n\n\n\n")
-k = Aspen.population[5]
-
-print(Aspen.population.index(k))
-Aspen.population.remove(k)
-
-for i in Aspen.population:
-    print(i.height)
+print(range(0))
+for i in range(0):
+    print('bruh')

@@ -167,7 +167,6 @@ class Wolf(Organism):
         # pack is an argument for the constructor. This is used for pack inheritence.
         self.ageM = 0 
         self.alive = True
-        self.id = len(Organism.population)
         self.fertile = False 
         # Standard atributes^^^^
         self.alpha = False # All wolves are born as non breeding ("alpha" is an innacurate term, but it's short and clear)
@@ -184,7 +183,6 @@ class Wolf(Organism):
         #     self.male = False
         #######################################################
         Wolf.packs[pack].append(self) # Appending self to pack list based on pack of mother
-        Organism.population.append(self) # Appending self to global population list
 
 
     def reproduce(self):
@@ -196,20 +194,17 @@ class Wolf(Organism):
                     Wolf(self.pack) # Constructs a new Wolf of the same Pack
     
     def eat(self):
-        # TODO: Confirm Wolf eating habits and implement 
-        # IIRC the wolves eat about 1 elk per wolf per month
-        prePrey = [i for i in Organism.population if type(i) == Elk]
-        prey = [j for j in prePrey if j.alive == True] # returns living Elk
+        # prePrey = [i for i in Organism.population if type(i) == Elk]
+        # prey = [j for j in prePrey if j.alive == True] # returns living Elk
         rdmEat = rdm.random()
         if rdmEat < 0.665:  # This should create the right number of elk killed on average (18-22 per wolf per year)
             preyQ = 2
         else:
             preyQ = 1
-        targets = rdm.sample(prey, preyQ)   # Returns 2 living elk at random
-        for i in targets:
-            Organism.population[i.id].die() # Kills number of elk based off target list
+        targets = rdm.sample(Elk.ePopulation, preyQ)    # Returns a semi-random number of elk
+        for a in targets:
+            Elk.ePopulation.remove(a)                   # Removes the elk from the list
         
-
     def die(self):
         # Organism.population[self.id].alive = False 
         # Organism.population[self.id].fertile

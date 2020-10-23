@@ -10,16 +10,19 @@ from organisms import* # Imports all classes
 
 # First thing we need to do is initialize the ecosystem to imitate the 1995 Greater Yellowstone ecosystem
 # FIXME: Update function to fix where the things are pointing
-def setInitState():
+def setInitState(totalWolves):
     # First step in that, is creating all of the Aspen trees and Elk
     # The problem with that, is that as far as I can tell, no one counted all the aspen trees in yellowstone in 1995
     # That means I have to guess, and tune by parameters to make it acurate to real life
     # 190000 Aspen 
     # 19000 elk    742659 
+    startWolves = round(totalWolves * 0.25)
     for _ in range(190000):
         Aspen()
     for _ in range(19000):
-        Elk()
+        Elk() 
+    for _ in range(startWolves):
+        Wolf(0)
 
     # This whole block of code is for setting up the Aspen stats 
     for a in Aspen.aPopulation:
@@ -37,11 +40,6 @@ def setInitState():
         # The ages of the elk is a normal distribution, with a guesstimate standard deviation.
         # This is mostly a way to make the elk
 
-
-
-
-
-
 def runMonth():
     for i in Aspen.aPopulation:
         i.nextMonth()
@@ -51,32 +49,36 @@ def runMonth():
     print("\n\nElk DONE\n\n")
     #TODO: Figure out how to run the Wolves, possibly utilise a dump list like Organism.population
 
+# Resets the populations
+def popsClear():
+    Aspen.aPopulation.clear()
+    Elk.ePopulation.clear()
+    Wolf.packs.clear()
+    Wolf.packs.append([])
 
 
-
-
-
-
-
+# All the treatments, being the total number of wolves re introduced
+treatments = [31, 11, 21, 41, 51] 
 
 
 # This version seems to give stable Elk numbers
-# TODO: Add Wolf re introduction
+# TODO: Add Wolf re introduction Specifically the wolf trickle
 # TODO: Start logging data and produce graphs for quick tweaking, 
 # or at lease start writing to a file so I can graph as the program is running
-for trials in range(5):                             # Number of trials per initial conditions
-    Organism.population.clear()
-    setInitState()
-    for years in range(10):                         # Controls duration of years in experiment
-        for months in range(12):                    # Makes it so theres 12 months in the year
-            print('SUCESS')
-            Organism.elapsedM = Organism.elapsedM + 1
-            print ("month", Organism.elapsedM)
-            start = timer()
-            runMonth()
-            print("There are currently ",len(Aspen.aPopulation), " Aspen")
-            print("There are currently ", len(Elk.ePopulation), " Elk")
-            print(round(timer()-start))
+for treatment in treatments:
+    for trials in range(5):                             # Number of trials per initial conditions
+        popsClear()
+        setInitState(treatment)
+        for years in range(10):                         # Controls duration of years in experiment
+            for months in range(12):                    # Makes it so theres 12 months in the year
+                print('SUCESS')
+                Organism.elapsedM = Organism.elapsedM + 1
+                print ("month", Organism.elapsedM)
+                start = timer()
+                runMonth()
+                print("There are currently ",len(Aspen.aPopulation), " Aspen")
+                print("There are currently ", len(Elk.ePopulation), " Elk")
+                print(round(timer()-start))
 
 
 
