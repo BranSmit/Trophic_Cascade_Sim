@@ -60,24 +60,27 @@ def popsClear():
 # https://bit.ly/3kBDagl
 
 # All the treatments, being the total number of wolves re introduced
-# treatments =      [31, 11, 21, 41, 51] 
-initialTreatments = [ 8,  3,  5, 10, 13]                # Numbers of wolves introduced on month 1
-trickleTreatments = [23,  8, 16, 31, 38]                # Numbers of wolves intoduced in the coming years 
+# treatments = [31, 11, 21, 41, 51] 
+firstEvent  = [14,  5,  10, 18, 23]                # Numbers of wolves introduced on month 1
+secondEvent = [17,  6,  11, 23, 28]                # Numbers of wolves intoduced in the coming years 
 # This version seems to give stable Elk numbers
 # TODO: Add Wolf re introduction Specifically the wolf trickle
 # TODO: Start logging data and produce graphs for quick tweaking, 
 # or at lease start writing to a file so I can graph as the program is running
-for treatment in initialTreatments:
-    trickleTotal = trickleTreatments[treatment.index()]
-    perMonthSummation = trickleTotal / 12
-    running total
+for treatment in firstEvent:
+    secondEvent[firstEvent.index(treatment)]
+
+
     for trials in range(3):                             # Number of trials per initial conditions
         popsClear()
         setInitState(treatment)
         for years in range(10):                         # Controls duration of years in experiment
-            for months in range(12):                    # Makes it so theres 12 months in the year
-                
+            if years = 1:
+                for s in range(secondEvent[firstEvent.index(treatment)]):
+                    Wolf(something) # TODO: Fix whatever the hell this something should be, consider pre generating these wolves and storing them somewhere
+                    # Also re use the age and pack selection function thing.
 
+            for months in range(12):                    # Makes it so theres 12 months in the year
                 print('SUCESS')
                 Organism.elapsedM = Organism.elapsedM + 1
                 print ("month", Organism.elapsedM)
