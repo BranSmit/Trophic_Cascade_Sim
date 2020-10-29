@@ -78,7 +78,7 @@ for treatment in firstEvent:
             if years = 1:
                 for s in range(secondEvent[firstEvent.index(treatment)]):
                     Wolf(something) # TODO: Fix whatever the hell this something should be, consider pre generating these wolves and storing them somewhere
-                    # Also re use the age and pack selection function thing.
+                    # Also re use the age and pack selection function thing
 
             for months in range(12):                    # Makes it so theres 12 months in the year
                 print('SUCESS')
