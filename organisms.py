@@ -163,13 +163,13 @@ class Wolf(Organism):
 
     # Couldnt figure out to use super() so I just copied and pasted :/ 
     # Sorry John OOP
-    def __init__(self, pack):
+    def __init__(self, pack, ageM = 0, fertile = False, alpha = False):
         # pack is an argument for the constructor. This is used for pack inheritence.
-        self.ageM = 0 
+        self.ageM = ageM
         self.alive = True
-        self.fertile = False 
+        self.fertile = fertile
         # Standard atributes^^^^
-        self.alpha = False # All wolves are born as non breeding ("alpha" is an innacurate term, but it's short and clear)
+        self.alpha = alpha # All wolves are born as non breeding ("alpha" is an innacurate term, but it's short and clear)
         # There will only be one alpha per pack, for simplicity there will only be the "Alpha Female"
         self.pack = pack   # Pup inherits mother's pack identity
         self.packId = len(Wolf.packs[pack]) 
@@ -270,3 +270,4 @@ class Wolf(Organism):
 # usually monogamous, but about 25% of packs have multiple breeding pairs under polygymous matings
 # Birth period: mid-April
 # Average litter size in Yellowstone: 4.4 at den emergence, 3.2 survive until late December
+

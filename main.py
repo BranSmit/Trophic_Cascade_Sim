@@ -8,9 +8,18 @@ from organisms import* # Imports all classes
 
 # This script will be the master script
 
+
+# All the treatments, being the total number of wolves re introduced
+#treatments = [31, 11,  21, 41, 51]   
+firstEvent  = [14,  5,  10, 18, 23]                # Numbers of wolves introduced on month 1 
+secondEvent = [17,  6,  11, 23, 28]                # Numbers of wolves intoduced in the coming years 
+
+
+
+
 # First thing we need to do is initialize the ecosystem to imitate the 1995 Greater Yellowstone ecosystem
 # FIXME: Update function to fix where the things are pointing
-def setInitState(totalWolves):
+def setInitState(fEvent):
     # First step in that, is creating all of the Aspen trees and Elk
     # The problem with that, is that as far as I can tell, no one counted all the aspen trees in yellowstone in 1995
     # That means I have to guess, and tune by parameters to make it acurate to real life
@@ -20,8 +29,7 @@ def setInitState(totalWolves):
         Aspen()
     for _ in range(19000):
         Elk() 
-    for _ in range(totalWolves):
-        Wolf(0)
+    release(fEvent)
 
     # This whole block of code is for setting up the Aspen stats 
     for a in Aspen.aPopulation:
@@ -37,7 +45,16 @@ def setInitState(totalWolves):
             age = round(np.random.normal(78, 40))
         a.ageM = age           
         # The ages of the elk is a normal distribution, with a guesstimate standard deviation.
-        # This is mostly a way to make the elk
+        
+
+
+def release(q):
+    packQ = round(q / 7)
+    while len(Wolf.packs) < packQ:
+        
+    for _ in range(q):
+        
+
 
 def runMonth():
     for i in Aspen.aPopulation:
@@ -59,17 +76,13 @@ def popsClear():
 # Also, pretend it took 13 months
 # https://bit.ly/3kBDagl
 
-# All the treatments, being the total number of wolves re introduced
-# treatments = [31, 11, 21, 41, 51] 
-firstEvent  = [14,  5,  10, 18, 23]                # Numbers of wolves introduced on month 1
-secondEvent = [17,  6,  11, 23, 28]                # Numbers of wolves intoduced in the coming years 
+
+
 # This version seems to give stable Elk numbers
-# TODO: Add Wolf re introduction Specifically the wolf trickle
 # TODO: Start logging data and produce graphs for quick tweaking, 
 # or at lease start writing to a file so I can graph as the program is running
 for treatment in firstEvent:
-    secondEvent[firstEvent.index(treatment)]
-
+    p2 = secondEvent[firstEvent.index(treatment)]
 
     for trials in range(3):                             # Number of trials per initial conditions
         popsClear()
@@ -97,7 +110,6 @@ for treatment in firstEvent:
 # 226
 # SUCESS
 # month 20
-
 
 
 
