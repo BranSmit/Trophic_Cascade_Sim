@@ -270,4 +270,7 @@ class Wolf(Organism):
 # usually monogamous, but about 25% of packs have multiple breeding pairs under polygymous matings
 # Birth period: mid-April
 # Average litter size in Yellowstone: 4.4 at den emergence, 3.2 survive until late December
-
+b = 0
+for i in range(29):
+    print(b % 1)
+    b += 1

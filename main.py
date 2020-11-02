@@ -43,16 +43,30 @@ def setInitState(fEvent):
         age = round(np.random.normal(78, 40))
         while age < 0:                                  # If the value is negative, it's re rolled until positive
             age = round(np.random.normal(78, 40))
-        a.ageM = age           
+        a.ageM = age
         # The ages of the elk is a normal distribution, with a guesstimate standard deviation.
         
 
 
 def release(q):
+    j = len(Wolf.packs) 
     packQ = round(q / 7)
     while len(Wolf.packs) < packQ:
-        
+        Wolf.packs.append([])
+    i = 0
     for _ in range(q):
+        t = i % packQ
+        h = t + j
+        if len(Wolf.packs[h]) > 1:
+            Wolf.packs[h].append(Wolf(h, 36, True, True))
+        else:
+            age = rdm.randint(9, 60)
+            if age > 24:
+                fertile = True
+            else: 
+                fertile = False
+            Wolf.packs[h].append(Wolf(h, age, fertile, False))
+
         
 
 
@@ -89,20 +103,19 @@ for treatment in firstEvent:
         setInitState(treatment)
         for years in range(10):                         # Controls duration of years in experiment
             if years = 1:
-                for s in range(secondEvent[firstEvent.index(treatment)]):
-                    Wolf(something) # TODO: Fix whatever the hell this something should be, consider pre generating these wolves and storing them somewhere
-                    # Also re use the age and pack selection function thing
-
+                nIndex = firstEvent.index(treatment)
+                sQ = secondEvent[nIndex]
+                release(sQ)
             for months in range(12):                    # Makes it so theres 12 months in the year
                 print('SUCESS')
-                Organism.elapsedM = Organism.elapsedM + 1
+                Organism.elapsedM += 1
                 print ("month", Organism.elapsedM)
                 start = timer()
                 runMonth()
                 print("There are currently ",len(Aspen.aPopulation), " Aspen")
                 print("There are currently ", len(Elk.ePopulation), " Elk")
                 print(round(timer()-start))
-
+                
 
 
 # There are currently  221842  Aspen
