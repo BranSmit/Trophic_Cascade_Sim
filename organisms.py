@@ -101,7 +101,6 @@ class Elk(Organism):
 
 
     def eat(self):
-        print(len(Aspen.aPopulation))
         for _ in range(Elk.eatQ):
             targetPrey = rdm.randrange(0, len(Aspen.aPopulation))        # Returns a random index that exists for aspen pop
             if Aspen.aPopulation[targetPrey].height >= Elk.killThresh:   # Checks if the height of the population is over the kill threshold
@@ -187,7 +186,7 @@ class Wolf(Organism):
 
     def reproduce(self):
         if self.alpha == True: # Checks if wolf is an alpha
-            if len(Wolf.packs[pack]) > 1: # Checks if alpha has a partner. For simplicity we will disregard sex of partner
+            if len(Wolf.packs[self.pack]) > 1: # Checks if alpha has a partner. For simplicity we will disregard sex of partner
                 litterSize = range(rdm.choice(range(3,7))) 
                 # Wolves will have litters of 3 to 6 pups //This looks like a dumb way to do this, but who *really* cares ¯\_(ツ)_/¯
                 for pup in litterSize: # Iterates through litterSize list
@@ -244,8 +243,8 @@ class Wolf(Organism):
                 self.reproduce()
             if rdm.random() <= 0.03: # Chance of dying every year ~3%  Consider proportional random death
                 self.die()
-                if self.aplha == True:
-                    Wolf.packs[pack][packId].alpha = False     # Makes sure dead wolves arent alphas
+                if self.alpha == True:
+                    Wolf.packs[self.pack][self.packId].alpha = False     # Makes sure dead wolves arent alphas
                     self.alpha = False                         # Makes sure dead wolves arent alphas
                     living = [j for j in Wolf.packs[self.pack] if j.alive == True] # Returns a list of living wolves in this pack
                     nextAlpha = [j for j in living if j.fertile == True] # Returns a list of fertile living wolves (Look, I know this is a bit redundant and inefficient)
@@ -270,7 +269,3 @@ class Wolf(Organism):
 # usually monogamous, but about 25% of packs have multiple breeding pairs under polygymous matings
 # Birth period: mid-April
 # Average litter size in Yellowstone: 4.4 at den emergence, 3.2 survive until late December
-b = 0
-for i in range(29):
-    print(b % 1)
-    b += 1

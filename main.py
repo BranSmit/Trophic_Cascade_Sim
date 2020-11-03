@@ -57,7 +57,7 @@ def release(q):
     for _ in range(q):
         t = i % packQ
         h = t + j
-        if len(Wolf.packs[h]) > 1:
+        if len(Wolf.packs[h]) > 1: # FIXME: IndexError: list index out of range
             Wolf.packs[h].append(Wolf(h, 36, True, True))
         else:
             age = rdm.randint(9, 60)
@@ -77,6 +77,12 @@ def runMonth():
     for i in Elk.ePopulation:
         i.nextMonth()
     print("\n\nElk DONE\n\n")
+    for pack in Wolf.packs:
+        for w in pack:
+            w.nextMonth()
+
+
+
     #TODO: Figure out how to run the Wolves, possibly utilise a dump list like Organism.population
 
 # Resets the populations
@@ -97,12 +103,11 @@ def popsClear():
 # or at lease start writing to a file so I can graph as the program is running
 for treatment in firstEvent:
     p2 = secondEvent[firstEvent.index(treatment)]
-
     for trials in range(3):                             # Number of trials per initial conditions
         popsClear()
         setInitState(treatment)
         for years in range(10):                         # Controls duration of years in experiment
-            if years = 1:
+            if years == 1:
                 nIndex = firstEvent.index(treatment)
                 sQ = secondEvent[nIndex]
                 release(sQ)
