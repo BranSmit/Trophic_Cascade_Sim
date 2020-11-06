@@ -154,7 +154,7 @@ class Elk(Organism):
 class Wolf(Organism):
 
     # 2d array, the first index is the pack, and the second is the actual wolf itself
-    packs = [[]]
+    packs = []
 
     # Chance that wolf will form a new pack instead of joining a new one
     loneWolfChance = 0.3

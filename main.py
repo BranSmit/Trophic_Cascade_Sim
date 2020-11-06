@@ -51,32 +51,39 @@ def setInitState(fEvent):
 def release(q):
     j = len(Wolf.packs) 
     packQ = round(q / 7)
-    while len(Wolf.packs) < packQ:
+    n = packQ + j 
+    print(j, packQ, n)
+    while len(Wolf.packs) < n:
         Wolf.packs.append([])
+    print(q, " Wolves are being put in")
+    newpacks = range(packQ)
     i = 0
-    for _ in range(q):
-        t = i % packQ
-        h = t + j
-        if len(Wolf.packs[h]) > 1: # FIXME: IndexError: list index out of range
-            Wolf.packs[h].append(Wolf(h, 36, True, True))
+    for wolfN in range(q):
+        g = newpacks[i]
+        h = j + g
+        i += 1
+        if i == len(newpacks):
+            i = 0
+        if len(Wolf.packs[h]) < 1: 
+            Wolf(h, 36, True, True)
         else:
             age = rdm.randint(9, 60)
             if age > 24:
                 fertile = True
             else: 
                 fertile = False
-            Wolf.packs[h].append(Wolf(h, age, fertile, False))
-
+            Wolf(h, age, fertile, False)
+        
         
 
 
 def runMonth():
     for i in Aspen.aPopulation:
         i.nextMonth()
-    print("\n\nASPEN DONE\n\n")
+    print("ASPEN DONE")
     for i in Elk.ePopulation:
         i.nextMonth()
-    print("\n\nElk DONE\n\n")
+    print("Elk DONE")
     for pack in Wolf.packs:
         for w in pack:
             w.nextMonth()
@@ -90,7 +97,7 @@ def popsClear():
     Aspen.aPopulation.clear()
     Elk.ePopulation.clear()
     Wolf.packs.clear()
-    Wolf.packs.append([])
+
 
 # FIXME: use the real numbers to pix totals of initial and trickle wolves
 # Also, pretend it took 13 months
@@ -108,6 +115,7 @@ for treatment in firstEvent:
         setInitState(treatment)
         for years in range(10):                         # Controls duration of years in experiment
             if years == 1:
+            # if Organism.elapsedM == 6:
                 nIndex = firstEvent.index(treatment)
                 sQ = secondEvent[nIndex]
                 release(sQ)
@@ -119,7 +127,13 @@ for treatment in firstEvent:
                 runMonth()
                 print("There are currently ",len(Aspen.aPopulation), " Aspen")
                 print("There are currently ", len(Elk.ePopulation), " Elk")
-                print(round(timer()-start))
+                count = 0
+                for e in Wolf.packs:
+                    print(e)
+                    for p in e:
+                        count += 1
+                print("There are currently ", count, " Wolves in ", len(Wolf.packs), " Packs!")
+                print(round(timer()-start), "\n")
                 
 
 
