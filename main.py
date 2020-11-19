@@ -48,10 +48,10 @@ def release(q):
     j = len(Wolf.packs) 
     packQ = round(q / 7)
     n = packQ + j 
-    print(j, packQ, n)
+    # print(j, packQ, n)
     while len(Wolf.packs) < n:
         Wolf.packs.append([])
-    print(q, " Wolves are being put in")
+    print(q, "Wolves are being released")
     newpacks = range(packQ)
     i = 0
     for wolfN in range(q):
@@ -130,6 +130,7 @@ trialNumber = int(input("What trial is this?: "))
 fileName = "trtmnt" + str(nIndex) + "_trial" + str(trialNumber)
 fileNameCSV = fileName + ".csv"
 print("The file name will be :", fileNameCSV)
+print("\n########################################################################\n")
 
 # This version seems to give stable Elk numbers
 # TODO: Start logging data and produce graphs for quick tweaking, 
@@ -143,35 +144,53 @@ with open(fileNameCSV, 'w', newline='') as csv_file:
 
 fQ = firstEvent[nIndex]
 setInitState(fQ)
-for years in range(10):                         # Controls duration of years in experiment
-    if years == 1:
-    # if Organism.elapsedM == 6:
-        # nIndex = firstEvent.index(treatment)
-        sQ = secondEvent[nIndex]
-        release(sQ)
-    for months in range(12):                    # Makes it so theres 12 months in the year
-        print('SUCESS')
-        Organism.elapsedM += 1
-        print ("month", Organism.elapsedM)
-        start = timer()
-        runMonth()
-        print("There are currently ",len(Aspen.aPopulation), " Aspen")
-        print("There are currently ", len(Elk.ePopulation), " Elk")
-        count = 0
-        for e in Wolf.packs:
-            # print(e)
-            for p in e:
-                count += 1
-        print("There are currently ", count, " Wolves in ", len(Wolf.packs), " Packs!")
-        heights = []
-        for tree in Aspen.aPopulation:
-           heights.append(tree.height)
-        mAHeights = round(sts.mean(heights), ndigits=3)
-        newRow = [Organism.elapsedM, count, len(Elk.ePopulation), len(Aspen.aPopulation), mAHeights]
-        with open(fileNameCSV, "a", newline='') as csv_file:
-            csv_writer = csv.writer(csv_file)
-            csv_writer.writerow(newRow)
-        print(round(timer()-start), "\n")     
+try:
+    for years in range(10):                         # Controls duration of years in experiment
+        if years == 1:
+        # if Organism.elapsedM == 6:
+            # nIndex = firstEvent.index(treatment)
+            sQ = secondEvent[nIndex]
+            release(sQ)
+        for months in range(12):                    # Makes it so theres 12 months in the year
+
+            if months == 2:
+                print(1/0)
+
+            Organism.elapsedM += 1
+            print ("Month", Organism.elapsedM)
+            start = timer()
+            runMonth()
+            print("There are currently ",len(Aspen.aPopulation), " Aspen")
+            print("There are currently ", len(Elk.ePopulation), " Elk")
+            count = 0
+            for e in Wolf.packs:
+                # print(e)
+                for p in e:
+                    count += 1
+            print("There are currently ", count, " Wolves in ", len(Wolf.packs), " Packs!")
+            heights = []
+            for tree in Aspen.aPopulation:
+               heights.append(tree.height)
+            mAHeights = round(sts.mean(heights), ndigits=3)
+            newRow = [Organism.elapsedM, count, len(Elk.ePopulation), len(Aspen.aPopulation), mAHeights]
+            with open(fileNameCSV, "a", newline='') as csv_file:
+                csv_writer = csv.writer(csv_file)
+                csv_writer.writerow(newRow)
+            print('SUCESS')
+            print("Month time:",round(timer()-start), "seconds\n")
+except:
+    print("""
+    ################################################################################################################################################
+    ################################################################################################################################################
+    
+    
+                                                            THIS SHOULD NEVER HAPPEN.
+                                                THERE HAS BEEN A CRITICAL FAILURE, GOOD LUCK FIXING IT.
+    
+
+    ################################################################################################################################################
+    ################################################################################################################################################
+    """)     
 
 
 # There are currently  221842  Aspen
