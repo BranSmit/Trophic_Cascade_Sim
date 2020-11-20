@@ -153,10 +153,6 @@ try:
             sQ = secondEvent[nIndex]
             release(sQ)
         for months in range(12):                    # Makes it so theres 12 months in the year
-
-            if months == 2:
-                print(1/0)
-
             Organism.elapsedM += 1
             print ("Month", Organism.elapsedM)
             start = timer()
