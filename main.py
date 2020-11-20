@@ -107,7 +107,8 @@ It's reccomended to run multiple instances of TCS at once, as long as you leave 
 You must tell TCS which reintroduction preset to simulate. Custom wolf quantities are not stable at the moment.
 Population data is logged at the end of every month, and is written into a .csv file in this format:
 
-        | Month | Wolf Pop | Elk Pop | Aspen Pop | Mean Aspen Height | 
+        | Month | Wolf Pop | Elk Pop | Aspen Pop | Mean Aspen Height |
+        |-------|----------|---------|-----------|-------------------|
         |  int  |   int    |   int   |    int    | float (3 Sig Fig) |
         |  int  |   int    |   int   |    int    | float (3 Sig Fig) |
         etc.
