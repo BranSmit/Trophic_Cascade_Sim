@@ -163,7 +163,8 @@ try:
             for e in Wolf.packs:
                 # print(e)
                 for p in e:
-                    count += 1
+                    if p.alive == True:
+                        count += 1
             print("There are currently ", count, " Wolves in ", len(Wolf.packs), " Packs!")
             heights = []
             for tree in Aspen.aPopulation:

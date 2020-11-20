@@ -218,7 +218,7 @@ class Wolf(Organism):
             if rdm.random() < 0.64:
                 oldPackId = self.packId                          # Stores old packId
                 oldPack = self.pack                              # Stores old pack
-                if rdm.random() < Wolf.loneWolfChance:
+                if rdm.random() > Wolf.loneWolfChance:
                     newPack = rdm.choice(range(len(Wolf.packs))) # Returns the index of a random pack 
                     while newPack == self.pack:                  # Verifies that newPack doesnt equal current pack
                         newPack = rdm.choice(range(len(Wolf.packs)))
