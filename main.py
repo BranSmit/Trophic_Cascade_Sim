@@ -80,6 +80,7 @@ def runMonth():
     for pack in Wolf.packs:
         for w in pack:
             w.nextMonth()
+    print("WOLVES DONE")
 
 # Resets the populations
 def popsClear():
@@ -174,7 +175,7 @@ try:
             with open(fileNameCSV, "a", newline='') as csv_file:
                 csv_writer = csv.writer(csv_file)
                 csv_writer.writerow(newRow)
-            print('SUCESS')
+            print('SUCCESS')
             print("Month time:",round(timer()-start), "seconds\n")
 except:
     print("""

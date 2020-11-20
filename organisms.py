@@ -42,7 +42,7 @@ class Aspen(Organism):
 
     # Tunable rate of reproduction
     # height * reproductionFactor = amount of new trees
-    rf = 0.1
+    rf = 0.05
 
     # Overwriting base organisim constructor
     def __init__(self):
@@ -90,9 +90,9 @@ class Elk(Organism):
         Elk.ePopulation.append(self)
 
 
-    eatQ = 2 # Quantity of trees eaten a month
+    eatQ = 1 # Quantity of trees eaten a month
     killThresh = 35 # Height of tree before elk starts to slow growth instead of kill
-    birthRate = 0.5
+    birthRate = 0.4
 
     def reproduce(self):
         if Organism.elapsedM % 12 == 5:
@@ -200,6 +200,7 @@ class Wolf(Organism):
             preyQ = 2
         else:
             preyQ = 1
+        preyQ = round(preyQ * 5.6)  #To accound for GYE wolves
         targets = rdm.sample(Elk.ePopulation, preyQ)    # Returns a semi-random number of elk
         for a in targets:
             Elk.ePopulation.remove(a)                   # Removes the elk from the list
