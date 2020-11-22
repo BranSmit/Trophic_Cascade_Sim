@@ -42,7 +42,7 @@ class Aspen(Organism):
 
     # Tunable rate of reproduction
     # height * reproductionFactor = amount of new trees
-    rf = 0.05
+    rf = 0.06
 
     # Overwriting base organisim constructor
     def __init__(self):
@@ -90,8 +90,8 @@ class Elk(Organism):
         Elk.ePopulation.append(self)
 
 
-    eatQ = 1 # Quantity of trees eaten a month
-    killThresh = 35 # Height of tree before elk starts to slow growth instead of kill
+    # eatQ = 1 # Quantity of trees eaten a month
+    killThresh = 50 # Height of tree before elk starts to slow growth instead of kill
     birthRate = 0.4
 
     def reproduce(self):
@@ -101,10 +101,15 @@ class Elk(Organism):
 
 
     def eat(self):
-        for _ in range(Elk.eatQ):
+        rdmEat = rdm.random()
+        if rdmEat < 0.5: 
+            preyQ = 1
+        else:
+            preyQ = 0
+        for _ in range(preyQ):
             targetPrey = rdm.randrange(0, len(Aspen.aPopulation))        # Returns a random index that exists for aspen pop
             if Aspen.aPopulation[targetPrey].height >= Elk.killThresh:   # Checks if the height of the population is over the kill threshold
-                Aspen.aPopulation[targetPrey].gr *= 0.6                  # Simulates tree damage by decreasing growth rate
+                Aspen.aPopulation[targetPrey].gr *= 0.9                  # Simulates tree damage by decreasing growth rate
             else:
                 del Aspen.aPopulation[targetPrey]                        # Removes tree from list if under threshold
         
@@ -171,7 +176,8 @@ class Wolf(Organism):
         self.alpha = alpha # All wolves are born as non breeding ("alpha" is an innacurate term, but it's short and clear)
         # There will only be one alpha per pack, for simplicity there will only be the "Alpha Female"
         self.pack = pack   # Pup inherits mother's pack identity
-        self.packId = len(Wolf.packs[pack]) 
+        self.packId = len(Wolf.packs[pack])
+        self.migNext = False 
         # Much like the global id attribute, the packId attribute is the Index of the wolf inside it's pack
         # Add this code back if you decide that Wolves need a sex attribute
         #######################################################
@@ -214,31 +220,48 @@ class Wolf(Organism):
         Wolf.packs[self.pack][self.packId].fertile = False 
 
     def migrate(self):
-        if self.ageM == 24:
-            self.fertile = True
-            if rdm.random() < 0.64:
-                oldPackId = self.packId                          # Stores old packId
-                oldPack = self.pack                              # Stores old pack
-                if rdm.random() > Wolf.loneWolfChance:
-                    newPack = rdm.choice(range(len(Wolf.packs))) # Returns the index of a random pack 
-                    while newPack == self.pack:                  # Verifies that newPack doesnt equal current pack
-                        newPack = rdm.choice(range(len(Wolf.packs)))
-                else:
-                    newPack = len(Wolf.packs)                    # Uses length before new pack as index of new pack
-                    Wolf.packs.append([])                        # Appends blank list with index that matched newPack
-                    self.aplha = True
-                self.packId = len(Wolf.packs[newPack])           # Reassigns PackId to the index of the new pack
-                self.pack = newPack                              # Reassigns Pack to the index of the Wolf.packs list
-                Wolf.packs[newPack].append(self)                 # Appends self to new pack
-                Wolf.packs[oldPack][oldPackId].alive = False     # Kills old wolf
-                Wolf.packs[oldPack][oldPackId].fertile = False   # Makes old wolf infertile (So they can't be re assigned as the new alpha if alpha dies)
+        self.fertile = True
+        if rdm.random() < 0.7:
+            oldPackId = self.packId                          # Stores old packId
+            oldPack = self.pack                              # Stores old pack
+            if rdm.random() > Wolf.loneWolfChance:
+                newPack = rdm.choice(range(len(Wolf.packs))) # Returns the index of a random pack 
+                while newPack == self.pack:                  # Verifies that newPack doesnt equal current pack
+                    newPack = rdm.choice(range(len(Wolf.packs)))
+            else:
+                newPack = len(Wolf.packs)                    # Uses length before new pack as index of new pack
+                Wolf.packs.append([])                        # Appends blank list with index that matched newPack
+                self.aplha = True
+            self.packId = len(Wolf.packs[newPack])           # Reassigns PackId to the index of the new pack
+            self.pack = newPack                              # Reassigns Pack to the index of the Wolf.packs list
+            Wolf.packs[newPack].append(self)                 # Appends self to new pack
+            Wolf.packs[oldPack][oldPackId].alive = False     # Kills old wolf
+            Wolf.packs[oldPack][oldPackId].fertile = False   # Makes old wolf infertile (So they can't be re assigned as the new alpha if alpha dies)
+
+    def migNEXT(self):
+        oldPackId = self.packId                          # Stores old packId
+        oldPack = self.pack                              # Stores old pack
+
+        newPack2 = rdm.choice(range(len(Wolf.packs))) # Returns the index of a random pack 
+        while newPack2 == self.pack:                  # Verifies that newPack doesnt equal current pack
+            newPack2 = rdm.choice(range(len(Wolf.packs)))
+        self.packId = len(Wolf.packs[newPack2])           # Reassigns PackId to the index of the new pack
+        self.pack = newPack2                              # Reassigns Pack to the index of the Wolf.packs list
+        Wolf.packs[newPack2].append(self)                 # Appends self to new pack
+        Wolf.packs[oldPack][oldPackId].alive = False     # Kills old wolf
+        Wolf.packs[oldPack][oldPackId].fertile = False   # Makes old wolf infertile (So they can't be re assigned as the new alpha if alpha dies)    
+        self.migNext = False
+
 
 
     def nextMonth(self):
         # TODO: Implement Pack Migration using PackId's and Age. Do research about this part
         if self.alive == True:
             self.ageM = self.ageM + 1
-            self.migrate()
+            if self.ageM == 24:
+                self.migrate()
+            if self.migNext == True:
+                self.migNEXT()
             self.eat()
             if Organism.elapsedM % 12 == 4: # Only reproduce in april
                 self.reproduce()
@@ -250,8 +273,16 @@ class Wolf(Organism):
                     living = [j for j in Wolf.packs[self.pack] if j.alive == True] # Returns a list of living wolves in this pack
                     nextAlpha = [j for j in living if j.fertile == True] # Returns a list of fertile living wolves (Look, I know this is a bit redundant and inefficient)
                     # WORKING SLOW CODE IS BETTER THAN OPTIMISED CODE THAT DOESNT RUN
-                    nextAlphaId = nextAlpha[0].packId
-                    Wolf.packs[self.pack][nextAlphaId].alpha = True  # Makes the next living fertile wolf the Alpha
+                    try:
+                        nextAlphaId = nextAlpha[0].packId
+                        Wolf.packs[self.pack][nextAlphaId].alpha = True  # Makes the next living fertile wolf the Alpha
+                    except:
+                        for r in living:
+                            rPack = r.pack
+                            rPackId = r.packId
+                            Wolf.packs[rPack][rPackId].migNext = True
+
+            
     
 
 # Initializing the first packs can be done later, you need to figure out how to make a new wolf inherit it's mothers pack
