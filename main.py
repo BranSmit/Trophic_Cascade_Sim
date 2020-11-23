@@ -117,7 +117,7 @@ Population data is logged at the end of every month, and is written into a .csv 
 You must also indicate what trial is being computed at the moment, so the .csv file can be named accordingly.
         
 Wolf Quantity........""",totalTreatments,"""
-Index................   0   1   2   3   4
+Index................   0   1   2   3   4          .
 
 Index 0 is used for the experiment control.  All other Indexes are used for theoretical Wolf quantities.
 
