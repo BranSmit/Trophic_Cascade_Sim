@@ -42,7 +42,7 @@ class Aspen(Organism):
 
     # Tunable rate of reproduction
     # height * reproductionFactor = amount of new trees
-    rf = 0.06
+    rf = 0.013
 
     # Overwriting base organisim constructor
     def __init__(self):
@@ -72,7 +72,7 @@ class Aspen(Organism):
         if self.ageM > 2:                               # Makes sure the tree isnt reproducing right after its born
             if Organism.elapsedM % 12 == 4:             # Checks if it's the 4th month of the year
                 self.reproduce()                        # calls reproduce
-        if rdm.random() <= 0.1 :                        # checks if the random death occurs
+        if rdm.random() <= 0.03 :                        # checks if the random death occurs
             Aspen.aPopulation.remove(self)               # Kills tree by removing from list
 
 ##########################################################################################
@@ -91,8 +91,8 @@ class Elk(Organism):
 
 
     # eatQ = 1 # Quantity of trees eaten a month
-    killThresh = 50 # Height of tree before elk starts to slow growth instead of kill
-    birthRate = 0.4
+    killThresh = 60 # Height of tree before elk starts to slow growth instead of kill
+    birthRate = 0.45
 
     def reproduce(self):
         if Organism.elapsedM % 12 == 5:
@@ -102,14 +102,14 @@ class Elk(Organism):
 
     def eat(self):
         rdmEat = rdm.random()
-        if rdmEat < 0.5: 
+        if rdmEat < 0.4: 
             preyQ = 1
         else:
             preyQ = 0
         for _ in range(preyQ):
             targetPrey = rdm.randrange(0, len(Aspen.aPopulation))        # Returns a random index that exists for aspen pop
             if Aspen.aPopulation[targetPrey].height >= Elk.killThresh:   # Checks if the height of the population is over the kill threshold
-                Aspen.aPopulation[targetPrey].gr *= 0.9                  # Simulates tree damage by decreasing growth rate
+                Aspen.aPopulation[targetPrey].gr *= 0.8                  # Simulates tree damage by decreasing growth rate
             else:
                 del Aspen.aPopulation[targetPrey]                        # Removes tree from list if under threshold
         
@@ -193,7 +193,7 @@ class Wolf(Organism):
     def reproduce(self):
         if self.alpha == True: # Checks if wolf is an alpha
             if len(Wolf.packs[self.pack]) > 1: # Checks if alpha has a partner. For simplicity we will disregard sex of partner
-                litterSize = range(rdm.choice(range(3,7))) 
+                litterSize = range(rdm.choice(range(4,8))) 
                 # Wolves will have litters of 3 to 6 pups //This looks like a dumb way to do this, but who *really* cares ¯\_(ツ)_/¯
                 for pup in litterSize: # Iterates through litterSize list
                     Wolf(self.pack) # Constructs a new Wolf of the same Pack
@@ -202,11 +202,11 @@ class Wolf(Organism):
         # prePrey = [i for i in Organism.population if type(i) == Elk]
         # prey = [j for j in prePrey if j.alive == True] # returns living Elk
         rdmEat = rdm.random()
-        if rdmEat < 0.665:  # This should create the right number of elk killed on average (18-22 per wolf per year)
+        if rdmEat < 0.63:  # This should create the right number of elk killed on average (18-22 per wolf per year)
             preyQ = 2
         else:
             preyQ = 1
-        preyQ = round(preyQ * 5.6)  #To accound for GYE wolves
+        preyQ = round(preyQ * 4)  #To accound for GYE wolves
         targets = rdm.sample(Elk.ePopulation, preyQ)    # Returns a semi-random number of elk
         for a in targets:
             Elk.ePopulation.remove(a)                   # Removes the elk from the list
@@ -265,7 +265,7 @@ class Wolf(Organism):
             self.eat()
             if Organism.elapsedM % 12 == 4: # Only reproduce in april
                 self.reproduce()
-            if rdm.random() <= 0.03: # Chance of dying every year ~3%  Consider proportional random death
+            if rdm.random() <= 0.014: # Chance of dying every year ~3%  Consider proportional random death
                 self.die()
                 if self.alpha == True:
                     Wolf.packs[self.pack][self.packId].alpha = False     # Makes sure dead wolves arent alphas
