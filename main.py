@@ -178,7 +178,7 @@ while True:
                     csv_writer.writerow(newRow)
                 print('SUCCESS')
                 print("Month time:",round(timer()-start), "seconds\n")
-                break
+        break
     except:
         print("""
         ################################################################################################################################################
