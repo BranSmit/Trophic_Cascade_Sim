@@ -108,10 +108,10 @@ It's reccomended to run multiple instances of TCS at once, as long as you leave 
 You must tell TCS which reintroduction preset to simulate. Custom wolf quantities are not stable at the moment.
 Population data is logged at the end of every month, and is written into a .csv file in this format:
 
-        | Month | Wolf Pop | Elk Pop | Aspen Pop | Mean Aspen Height |
-        |-------|----------|---------|-----------|-------------------|
-        |  int  |   int    |   int   |    int    | float (3 Sig Fig) |
-        |  int  |   int    |   int   |    int    | float (3 Sig Fig) |
+        | Month | Wolf Pop | Elk Pop | Mean Aspen Height |
+        |-------|----------|---------|-------------------|
+        |  int  |   int    |   int   | float (3 Sig Fig) |
+        |  int  |   int    |   int   | float (3 Sig Fig) |
         etc.
 
 You must also indicate what trial is being computed at the moment, so the .csv file can be named accordingly.
@@ -141,55 +141,57 @@ print("\n#######################################################################
 popsClear()
 with open(fileNameCSV, 'w', newline='') as csv_file:
     csv_writer = csv.writer(csv_file)
-    columns = ["month", "wPop", "ePop", "aPop", "mAHeight"]
+    columns = ["month", "wPop", "ePop", "mAHeight"]
     csv_writer.writerow(columns)
 
 fQ = firstEvent[nIndex]
 setInitState(fQ)
-# try:
-for years in range(10):                         # Controls duration of years in experiment
-    if years == 1:
-    # if Organism.elapsedM == 6:
-        # nIndex = firstEvent.index(treatment)
-        sQ = secondEvent[nIndex]
-        release(sQ)
-    for months in range(12):                    # Makes it so theres 12 months in the year
-        Organism.elapsedM += 1
-        print ("Month", Organism.elapsedM)
-        start = timer()
-        runMonth()
-        print("There are currently ",len(Aspen.aPopulation), " Aspen")
-        print("There are currently ", len(Elk.ePopulation), " Elk")
-        count = 0
-        for e in Wolf.packs:
-            # print(e)
-            for p in e:
-                if p.alive == True:
-                    count += 1
-        print("There are currently ", count, " Wolves in ", len(Wolf.packs), " Packs!")
-        heights = []
-        for tree in Aspen.aPopulation:
-           heights.append(tree.height)
-        mAHeights = round(sts.mean(heights), ndigits=3)
-        newRow = [Organism.elapsedM, count, len(Elk.ePopulation), len(Aspen.aPopulation), mAHeights]
-        with open(fileNameCSV, "a", newline='') as csv_file:
-            csv_writer = csv.writer(csv_file)
-            csv_writer.writerow(newRow)
-        print('SUCCESS')
-        print("Month time:",round(timer()-start), "seconds\n")
-# except:
-    # print("""
-    ################################################################################################################################################
-    ################################################################################################################################################
-    
-    
-                                                #             THIS SHOULD NEVER HAPPEN.
-                                                # THERE HAS BEEN A CRITICAL FAILURE, GOOD LUCK FIXING IT.
-    
 
-    ################################################################################################################################################
-    ################################################################################################################################################
-    # """)     
+while True:
+    try:
+        for years in range(10):                         # Controls duration of years in experiment
+            if years == 1:
+            # if Organism.elapsedM == 6:
+                # nIndex = firstEvent.index(treatment)
+                sQ = secondEvent[nIndex]
+                release(sQ)
+            for months in range(12):                    # Makes it so theres 12 months in the year
+                Organism.elapsedM += 1
+                print ("Month", Organism.elapsedM)
+                start = timer()
+                runMonth()
+                print("There are currently ", len(Elk.ePopulation), " Elk")
+                count = 0
+                for e in Wolf.packs:
+                    # print(e)
+                    for p in e:
+                        if p.alive == True:
+                            count += 1
+                print("There are currently ", count, " Wolves in ", len(Wolf.packs), " Packs!")
+                heights = []
+                for tree in Aspen.aPopulation:
+                   heights.append(tree.height)
+                mAHeights = round(sts.mean(heights), ndigits=3)
+                newRow = [Organism.elapsedM, count, len(Elk.ePopulation), mAHeights]
+                with open(fileNameCSV, "a", newline='') as csv_file:
+                    csv_writer = csv.writer(csv_file)
+                    csv_writer.writerow(newRow)
+                print('SUCCESS')
+                print("Month time:",round(timer()-start), "seconds\n")
+                break
+    except:
+        print("""
+        ################################################################################################################################################
+        ################################################################################################################################################
+
+
+                                                                THERE HAS BEEN AN ERROR
+                                                                    TRYING AGAIN
+
+
+        ################################################################################################################################################
+        ################################################################################################################################################
+        # """)     
 
 
 # There are currently  221842  Aspen

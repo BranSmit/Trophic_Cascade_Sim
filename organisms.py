@@ -1,5 +1,6 @@
 import random as rdm
 import math
+from timeit import default_timer as timer
 # from numba import jit, cuda
 #Defined basic structure of all sub classes
 class Organism:
@@ -221,6 +222,7 @@ class Wolf(Organism):
 
     def migrate(self):
         self.fertile = True
+        nn = timer()
         if rdm.random() < 0.7:
             oldPackId = self.packId                          # Stores old packId
             oldPack = self.pack                              # Stores old pack
@@ -228,6 +230,8 @@ class Wolf(Organism):
                 newPack = rdm.choice(range(len(Wolf.packs))) # Returns the index of a random pack 
                 while newPack == self.pack:                  # Verifies that newPack doesnt equal current pack
                     newPack = rdm.choice(range(len(Wolf.packs)))
+                    if timer() - nn > 5:
+                        raise Exception("Bad loop")
             else:
                 newPack = len(Wolf.packs)                    # Uses length before new pack as index of new pack
                 Wolf.packs.append([])                        # Appends blank list with index that matched newPack
@@ -239,12 +243,14 @@ class Wolf(Organism):
             Wolf.packs[oldPack][oldPackId].fertile = False   # Makes old wolf infertile (So they can't be re assigned as the new alpha if alpha dies)
 
     def migNEXT(self):
+        mn = timer()
         oldPackId = self.packId                          # Stores old packId
         oldPack = self.pack                              # Stores old pack
-
         newPack2 = rdm.choice(range(len(Wolf.packs))) # Returns the index of a random pack 
         while newPack2 == self.pack:                  # Verifies that newPack doesnt equal current pack
             newPack2 = rdm.choice(range(len(Wolf.packs)))
+            if timer() - mn > 5:
+                raise Exception("Bad loop")
         self.packId = len(Wolf.packs[newPack2])           # Reassigns PackId to the index of the new pack
         self.pack = newPack2                              # Reassigns Pack to the index of the Wolf.packs list
         Wolf.packs[newPack2].append(self)                 # Appends self to new pack
