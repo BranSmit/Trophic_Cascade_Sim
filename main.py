@@ -138,17 +138,19 @@ print("\n#######################################################################
 # TODO: Start logging data and produce graphs for quick tweaking, 
 # or at lease start writing to a file so I can graph as the program is running
 
-popsClear()
-with open(fileNameCSV, 'w', newline='') as csv_file:
-    csv_writer = csv.writer(csv_file)
-    columns = ["month", "wPop", "ePop", "mAHeight"]
-    csv_writer.writerow(columns)
 
-fQ = firstEvent[nIndex]
-setInitState(fQ)
+
 
 while True:
     try:
+        popsClear()
+        with open(fileNameCSV, 'w', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file)
+            columns = ["month", "wPop", "ePop", "mAHeight"]
+            csv_writer.writerow(columns)
+        fQ = firstEvent[nIndex]
+        setInitState(fQ)
+
         for years in range(10):                         # Controls duration of years in experiment
             if years == 1:
             # if Organism.elapsedM == 6:
@@ -183,15 +185,12 @@ while True:
         print("""
         ################################################################################################################################################
         ################################################################################################################################################
-
-
                                                                 THERE HAS BEEN AN ERROR
                                                                     TRYING AGAIN
-
-
         ################################################################################################################################################
         ################################################################################################################################################
-        # """)     
+        # """)
+        Organism.elapsedM = 0     
 
 
 # There are currently  221842  Aspen

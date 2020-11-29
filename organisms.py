@@ -258,8 +258,6 @@ class Wolf(Organism):
         Wolf.packs[oldPack][oldPackId].fertile = False   # Makes old wolf infertile (So they can't be re assigned as the new alpha if alpha dies)    
         self.migNext = False
 
-
-
     def nextMonth(self):
         # TODO: Implement Pack Migration using PackId's and Age. Do research about this part
         if self.alive == True:
@@ -268,7 +266,10 @@ class Wolf(Organism):
                 self.migrate()
             if self.migNext == True:
                 self.migNEXT()
-            self.eat()
+            try:
+                self.eat()
+            except:
+                pass
             if Organism.elapsedM % 12 == 4: # Only reproduce in april
                 self.reproduce()
             if rdm.random() <= 0.014: # Chance of dying every year ~3%  Consider proportional random death
