@@ -114,6 +114,11 @@ Population data is logged at the end of every month, and is written into a .csv 
         |  int  |   int    |   int   | float (3 Sig Fig) |
         etc.
 
+All of this data would be really useful for improving this simulation and other diognostic purposes, 
+but since my IA can only have 12 pages, Just the inital and Final mean aspen heights will be recorded. 
+In all Bechta papers on this topic, they measure the aspen heights in the early spring, so the same has been done here.
+The the month 3 height and the 111th month height will be output to the terminal at the end of the simulation. 
+
 You must also indicate what trial is being computed at the moment, so the .csv file can be named accordingly.
         
 Wolf Quantity........""",totalTreatments,"""
@@ -180,6 +185,10 @@ while True:
                     csv_writer.writerow(newRow)
                 print('SUCCESS')
                 print("Month time:",round(timer()-start), "seconds\n")
+                if Organism.elapsedM == 3:
+                    innit = mAHeights
+                if Organism.elapsedM == 111:
+                    finall = mAHeights
         break
     except:
         print("""
@@ -193,23 +202,12 @@ while True:
         Organism.elapsedM = 0     
 
 
-# There are currently  221842  Aspen
-# There are currently  31040  Elk
-# 226
-# SUCESS
-# month 20
+print("""
+################################################################################################################################################
+################################################################################################################################################
 
+SIMULATION COMPLETE
+""")
 
+print("Initial mean aspen height: ", innit ," Final mean aspen height: ", finall)
 
-# for i in Organism.population:
-#     i.reproduce()
-
-# # # mu, sigma = 35, 10
-# s = np.random.normal(78, 40, 1000)
-
-# count, bins, ignored = plt.hist(s, 30, density=True)
-# # # # plt.plot(bins, 1/(sigma * np.sqrt(2 * np.pi)) *
-# # # #                np.exp( - (bins - mu)**2 / (2 * sigma**2) ),
-# # # #          linewidth=2, color='r')
-# # # plt.plot(count)
-# plt.show()
