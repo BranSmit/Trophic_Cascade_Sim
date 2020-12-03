@@ -88,14 +88,10 @@ def popsClear():
     Elk.ePopulation.clear()
     Wolf.packs.clear()
 
-
-# FIXME: use the real numbers to pix totals of initial and trickle wolves
-# Also, pretend it took 13 months
-# https://bit.ly/3kBDagl
 print("""
 TROPHIC CASCADE SIMULATOR
 
-Made by Brandon Smith in 2020 for his IB BIO IA
+Made by a Student in 2020 for their IB BIO IA
 
 
 Welcome to TCS, a small computational model of Yellowstone National Park's Wolf Reintroduction effort. TCS is specifically
@@ -115,14 +111,14 @@ Population data is logged at the end of every month, and is written into a .csv 
         etc.
 
 All of this data would be really useful for improving this simulation and other diognostic purposes, 
-but since my IA can only have 12 pages, Just the inital and Final mean aspen heights will be recorded. 
+but since the dev's IA can only have 12 pages, Just the inital and Final mean aspen heights will be recorded. 
 In all Bechta papers on this topic, they measure the aspen heights in the early spring, so the same has been done here.
 The the month 3 height and the 111th month height will be output to the terminal at the end of the simulation. 
 
 You must also indicate what trial is being computed at the moment, so the .csv file can be named accordingly.
         
 Wolf Quantity........""",totalTreatments,"""
-Index................   0   1   2   3   4          .
+Index................   0   1   2   3   4          
 
 Index 0 is used for the experiment control.  All other Indexes are used for theoretical Wolf quantities.
 
